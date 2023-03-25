@@ -15,4 +15,3 @@ export const client = new Client({
 
 await client.connect();
 console.log("Terhubung ke basis data.");
-git push -u origin main
