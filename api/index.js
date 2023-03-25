@@ -12,7 +12,7 @@ const app = express();
 
 // middleware untuk membaca body berformat JSON
 app.use(express.json());
-
+app.use(express.static("public"));
 // middleware untuk mengelola cookie
 app.use(cookieParser());
 
@@ -54,7 +54,6 @@ app.post("/api/akun", async (req, res) => {
     res.send("Akun berhasil ditambahkan.");
   }
 });
-
 // edit
 app.put("/api/edit-password/akun", async (req, res) => {
   const result = await client.query(`select username from akun where username = '${req.body.username}'`);
