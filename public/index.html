@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi-ALi</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      #countainer {
+        background-color: darkgray;
+        display: flex;
+        width: 80rem;
+        height: 17rem;
+        justify-content: space-between;
+      }
+      #serch {
+        background-color: aquamarine;
+        display: flex;
+      }
+      #left-countain {
+        width: 25%;
+        background-color: aqua;
+      }
+      #right-countain {
+        width: 100%;
+        background-color: blue;
+      }
+      .photo {
+        width: 70px;
+      }
+      .photo > img {
+        width: 70px;
+        height: 80px;
+      }
+      .pesan-teman {
+        display: block;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="countainer">
+      <span id="left-countain">
+        <span class="header">
+          <span>profil</span>
+          <span>kumunitas</span>
+          <span>status</span>
+          <span>chet baru</span>
+          <span>Menu</span>
+        </span>
+        <div id="serch">
+          <input type="url" />
+          <!-- <img class="serch-right" src="" alt="dasdddasda" /> -->
+        </div>
+        <div class="teman"></div>
+      </span>
+
+      <span id="right-countain">
+        <div>
+          <!-- <div class="photo"><img src="../phote/countai.jpg" alt="" /></div> -->
+          <div class="awal">
+            <h1>WhatsApp Web</h1>
+            <p>
+              kirim dan terima pesan tanpa perlu menghubungkan telepon Anda ke
+              Intenet <br />
+              Gunakan WhatsApp di maksimal 4 perangkat tertaut dan 1 telepon
+              sekaligun.
+            </p>
+          </div>
+        </div>
+      </span>
+    </div>
+    <script>
+      let pengguna;
+      const pengirim = "";
+      fetch("/api/me")
+        .then((res) => res.json())
+        .then((user) => {
+          pengguna = user;
+          console.log(pengguna);
+        });
+      const teman = document.querySelector(".teman");
+
+      async function tampilkanTeman() {
+        const res = await fetch("/api/teman");
+        const data = await res.json();
+        // console.log(data);
+        data.forEach((e, i) => {
+          const a = document.createElement("button");
+          a.textContent = e.nama_lengkap;
+          a.value = e.id;
+          a.className = `pesan-teman`;
+          teman.appendChild(a);
+        });
+
+        const button = document.querySelectorAll("button");
+        button.forEach((e, i) => {
+          console.log(e);
+          e.addEventListener("click", async () => {
+            console.log(pengguna);
+            const awal = document.querySelector(".awal");
+            awal.style.display = "none";
+            const res = await fetch("/api/tampil-pesan", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                pengirim: pengguna.id,
+                penerima: e.value,
+              }),
+            });
+            const data = await res.json();
+            console.log(data);
+          });
+        });
+      }
+
+      tampilkanTeman();
+    </script>
+  </body>
+</html>

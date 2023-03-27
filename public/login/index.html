@@ -10,15 +10,15 @@
   <body>
     <form name="login">
       Username
-      <input type="text" name="nim" />
-      Kata sandi:
+      <input type="text" name="username" />
+      Kata sandi
       <input type="password" name="password" />
       <button>Login</button>
     </form>
     <script>
       document.login.onsubmit = (e) => {
         e.preventDefault();
-        const nim = document.login.nim.value;
+        const username = document.login.username.value;
         const password = document.login.password.value;
         fetch("/api/login", {
           method: "POST",
@@ -26,7 +26,7 @@
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            nim,
+            username,
             password,
           }),
         }).then(async (response) => {

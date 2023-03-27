@@ -77,7 +77,7 @@ app.post("/api/login", async (req, res) => {
   );
   if (results.rows.length > 0) {
     if (await bcrypt.compare(req.body.password, results.rows[0].password)) {
-      const token = jwt.sign(results.rows[0], "dsssss");
+      const token = jwt.sign(results.rows[0], process.env.SECRET_KEY);
       res.cookie("token", token);
       res.send("Login berhasil.");
     } else {
@@ -94,7 +94,7 @@ app.post("/api/login", async (req, res) => {
 app.use((req, res, next) => {
   if (req.cookies.token) {
     try {
-      jwt.verify(req.cookies.token, "dsssss");
+      jwt.verify(req.cookies.token, process.env.SECRET_KEY);
       next();
     } catch (err) {
       res.status(401);
@@ -106,13 +106,26 @@ app.use((req, res, next) => {
   }
 });
 
-// dapatkan mahasiswa yang login
+// dapatkan username yang login
 app.get("/api/me", (req, res) => {
-  const me = jwt.verify(req.cookies.token, "dsssss");
-  console.log(me);
+  const me = jwt.verify(req.cookies.token, process.env.SECRET_KEY);
   res.json(me);
 });
-
+app.get("/api/teman", async (_req, res) => {
+  // const results = await client.query("select a.* from temen t inner join akun a  ON a.id = t.permintaan  where t.terima = 'true'");
+  const results = await client.query("select * from akun order by id asc ");
+  res.send(results.rows);
+});
+app.post("/api/tampil-pesan", async (req, res) => {
+  console.log(req.body.pengirim);
+  const pengirim = parseInt(req.body.pengirim);
+  const penerima = parseInt(req.body.penerima);
+  console.log(pengirim)
+  console.log(penerima);
+  const data = await client.query(`select * from pesan where id_pengirim = ${pengirim} AND id_penerima = ${penerima} or id_pengirim = ${penerima} AND id_penerima = ${pengirim} order by tanggal_waktu asc`)
+  console.log(data.rows);
+  res.send(data.rows);
+})
 
 app.listen(3000, () => {
   console.log("Server berhasil berjalan.");
