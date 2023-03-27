@@ -40,6 +40,13 @@
         display: block;
         cursor: pointer;
       }
+      .user {
+        display: flex;
+        justify-items: center;
+        align-items: flex-end;
+        background: azure;
+        flex-direction: column;
+      }
     </style>
   </head>
   <body>
@@ -60,9 +67,9 @@
       </span>
 
       <span id="right-countain">
-        <div>
-          <!-- <div class="photo"><img src="../phote/countai.jpg" alt="" /></div> -->
+        <div id="kontak">
           <div class="awal">
+            <!-- <div class="photo"><img src="../phote/countai.jpg" alt="" /></div> -->
             <h1>WhatsApp Web</h1>
             <p>
               kirim dan terima pesan tanpa perlu menghubungkan telepon Anda ke
@@ -76,20 +83,20 @@
     </div>
     <script>
       let pengguna;
-      const pengirim = "";
+
+      const kontak = document.querySelector("#kontak");
       fetch("/api/me")
         .then((res) => res.json())
         .then((user) => {
           pengguna = user;
-          console.log(pengguna);
         });
       const teman = document.querySelector(".teman");
-
+      const dataTeman = [];
       async function tampilkanTeman() {
         const res = await fetch("/api/teman");
         const data = await res.json();
-        // console.log(data);
         data.forEach((e, i) => {
+          dataTeman[i] = e;
           const a = document.createElement("button");
           a.textContent = e.nama_lengkap;
           a.value = e.id;
@@ -99,28 +106,44 @@
 
         const button = document.querySelectorAll("button");
         button.forEach((e, i) => {
-          console.log(e);
           e.addEventListener("click", async () => {
-            console.log(pengguna);
             const awal = document.querySelector(".awal");
             awal.style.display = "none";
-            const res = await fetch("/api/tampil-pesan", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                pengirim: pengguna.id,
-                penerima: e.value,
-              }),
-            });
-            const data = await res.json();
-            console.log(data);
+            membuatBio(i);
+
+            // pesan
+            pesan(e);
+            // console.log(data);
           });
         });
       }
-
+      function membuatBio(index) {
+        const div = document.createElement("div");
+        const h2 = document.createElement("h2");
+        h2.textContent = dataTeman[index].username;
+        div.appendChild(h2);
+        kontak.appendChild(div);
+      }
       tampilkanTeman();
+
+      async function pesan(e) {
+        const res = await fetch(`/api/tampil-pesan/${e.value}`);
+        const data = await res.json();
+        console.log(data);
+        data.forEach((e) => {
+          const div = document.createElement("div");
+          const divPesan = document.createElement("div");
+          const h3 = document.createElement("h3");
+          h3.textContent = e.pesan;
+          divPesan.appendChild(h3);
+          div.appendChild(divPesan);
+          kontak.appendChild(div);
+          e.id_pengirim === pengguna.id
+            ? (div.className = "user")
+            : (div.className = "penerima");
+        });
+        // const
+      }
     </script>
   </body>
 </html>

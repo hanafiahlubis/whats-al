@@ -94,7 +94,7 @@ app.post("/api/login", async (req, res) => {
 app.use((req, res, next) => {
   if (req.cookies.token) {
     try {
-      jwt.verify(req.cookies.token, process.env.SECRET_KEY);
+      req.me = jwt.verify(req.cookies.token, process.env.SECRET_KEY);
       next();
     } catch (err) {
       res.status(401);
@@ -108,24 +108,17 @@ app.use((req, res, next) => {
 
 // dapatkan username yang login
 app.get("/api/me", (req, res) => {
-  const me = jwt.verify(req.cookies.token, process.env.SECRET_KEY);
-  res.json(me);
+  res.json(req.me);
 });
 app.get("/api/teman", async (_req, res) => {
-  // const results = await client.query("select a.* from temen t inner join akun a  ON a.id = t.permintaan  where t.terima = 'true'");
-  const results = await client.query("select * from akun order by id asc ");
+ const results = await client.query("select * from akun order by id asc ");
   res.send(results.rows);
 });
-app.post("/api/tampil-pesan", async (req, res) => {
-  console.log(req.body.pengirim);
-  const pengirim = parseInt(req.body.pengirim);
-  const penerima = parseInt(req.body.penerima);
-  console.log(pengirim)
-  console.log(penerima);
-  const data = await client.query(`select * from pesan where id_pengirim = ${pengirim} AND id_penerima = ${penerima} or id_pengirim = ${penerima} AND id_penerima = ${pengirim} order by tanggal_waktu asc`)
-  console.log(data.rows);
-  res.send(data.rows);
-})
+app.get("/api/tampil-pesan/:id", async (req, res) => {
+  const idPenerima = parseInt(req.params.id);
+  const data = await client.query(`select * from pesan where id_pengirim = ${req.me.id} AND id_penerima = ${idPenerima} or id_pengirim = ${idPenerima} AND id_penerima = ${req.me.id} order by tanggal_waktu asc`)
+  res.json(data.rows);
+});
 
 app.listen(3000, () => {
   console.log("Server berhasil berjalan.");
