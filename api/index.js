@@ -7,21 +7,59 @@ import { client } from "./db.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcryptjs";
+import multer from "multer";
 
+const upload = multer({ dest: "public/photos" });
+
+const type = upload.single('file')
 const app = express();
 
 // middleware untuk membaca body berformat JSON
 app.use(express.json());
-app.use(express.static("public"));
 // middleware untuk mengelola cookie
+
+// Untuk mengakses file statis (khusus Vercel)
+
+app.use(express.static("public"));
+
+import path from "path";
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+app.use(express.static(path.resolve(__dirname, "public")));
+
+// tambah akun
+app.post("/api/akun", type, async (req, res) => {
+  const result = await client.query("select username from akun");
+  let ada = false;
+  result.rows.forEach(e => (e.username === req.body.username) ? ada = true : "");
+  if (ada) {
+    res.send("Username Sudah ada");
+  } else {
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(req.body.password, salt);
+    await client.query(
+      `INSERT INTO akun VALUES (default,'${req.body.username}', '${hash}','${req.body.nama_lengkap}','${req.file.filename}')`
+    );
+    res.send("Akun berhasil ditambahkan.");
+  }
+});
+
 app.use(cookieParser());
 
-// middleware untuk mengalihkan ke halaman login
 app.use((req, res, next) => {
-  if (req.path.startsWith("/assets") || req.path.startsWith("/api")) {
+  if (req.path.startsWith("/api/login") || req.path.startsWith("/assets")) {
     next();
   } else {
+    let authorized = false;
     if (req.cookies.token) {
+      try {
+        jwt.verify(req.cookies.token, process.env.SECRET_KEY);
+        authorized = true;
+      } catch (err) {
+        res.setHeader("Cache-Control", "no-store"); // khusus Vercel
+        res.clearCookie("token");
+      }
+    }
+    if (authorized) {
       if (req.path.startsWith("/login")) {
         res.redirect("/");
       } else {
@@ -31,29 +69,18 @@ app.use((req, res, next) => {
       if (req.path.startsWith("/login")) {
         next();
       } else {
-        res.redirect("/login");
+        if (req.path.startsWith("/api")) {
+          res.status(401);
+          res.send("Anda harus login terlebih dahulu.");
+        } else {
+          res.redirect("/login");
+        }
       }
     }
   }
 });
 
-// tambah
-app.post("/api/akun", async (req, res) => {
-  const result = await client.query("select username from akun");
-  console.log(result.rows);
-  let ada = false;
-  result.rows.forEach(e => (e.username === req.body.username) ? ada = true : "");
-  if (ada) {
-    res.send("Username Sudah ada");
-  } else {
-    const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(req.body.password, salt);
-    await client.query(
-      `INSERT INTO akun VALUES (default,'${req.body.username}', '${hash}','${req.body.nama_lengkap}')`
-    );
-    res.send("Akun berhasil ditambahkan.");
-  }
-});
+
 // edit
 app.put("/api/edit-password/akun", async (req, res) => {
   const result = await client.query(`select username from akun where username = '${req.body.username}'`);
@@ -70,7 +97,10 @@ app.put("/api/edit-password/akun", async (req, res) => {
     res.send("Username Tidak Ada");
   }
 });
+// Untuk mengakses file statis
+// app.use(express.static("public"));
 
+// Untuk membaca body berformat JSON
 app.post("/api/login", async (req, res) => {
   const results = await client.query(
     `SELECT * FROM akun WHERE username = '${req.body.username}'`
@@ -90,34 +120,25 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-// middleware untuk mengotentikasi pengguna
-app.use((req, res, next) => {
-  if (req.cookies.token) {
-    try {
-      req.me = jwt.verify(req.cookies.token, process.env.SECRET_KEY);
-      next();
-    } catch (err) {
-      res.status(401);
-      res.send("Anda harus login lagi.");
-    }
-  } else {
-    res.status(401);
-    res.send("Anda harus login terlebih dahulu.");
-  }
-});
-
 // dapatkan username yang login
 app.get("/api/me", (req, res) => {
+  console.log(req.me);
   res.json(req.me);
 });
 app.get("/api/teman", async (_req, res) => {
- const results = await client.query("select * from akun order by id asc ");
+  const results = await client.query("select * from akun order by id asc ");
   res.send(results.rows);
 });
 app.get("/api/tampil-pesan/:id", async (req, res) => {
   const idPenerima = parseInt(req.params.id);
   const data = await client.query(`select * from pesan where id_pengirim = ${req.me.id} AND id_penerima = ${idPenerima} or id_pengirim = ${idPenerima} AND id_penerima = ${req.me.id} order by tanggal_waktu asc`)
   res.json(data.rows);
+});
+app.post("/api/tambah/pesan/:id", async (req, _res) => {
+  console.log(req.body);
+  const idPenerima = parseInt(req.params.id);
+  await client.query(`insert into pesan values(default,${req.me.id},${idPenerima},now(), '${req.body.pesan}','false') `)
+  console.log("berhasil");
 });
 
 app.listen(3000, () => {

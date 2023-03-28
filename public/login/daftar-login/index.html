@@ -1,5 +1,6 @@
+!
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -23,9 +24,9 @@
       .login-form-container {
         position: relative;
         width: 400px;
-        height: 470px;
+        height: 36rem;
         max-width: 400px;
-        max-height: 470px;
+        max-height: 100vh;
         background: #040717;
         border-radius: 50px 5px;
         display: flex;
@@ -144,7 +145,6 @@
         cursor: pointer;
         font-size: 18px;
       }
-
       .glowIcon {
         text-shadow: 0 0 10px #00ccff;
       }
@@ -153,7 +153,7 @@
   <body>
     <div class="login-form-container">
       <div class="login-form">
-        <h2>Login</h2>
+        <h2>SingUp</h2>
         <div class="input-group">
           <i class="fa fa-user"></i>
           <input
@@ -174,42 +174,47 @@
             autocomplete="off"
           />
         </div>
+        <div class="input-group">
+          <i class="fa fa-user"></i>
+          <input
+            type="text"
+            placeholder="Full Name"
+            class="input-text"
+            autocomplete="off"
+            id="name"
+          />
+        </div>
+        <div class="input-group">
+          <i class="fa fa-user"></i>
+          <input type="file" class="input-text" autocomplete="off" id="file" />
+        </div>
+
         <div class="button-group" id="login-button">
           <button>Submit</button>
         </div>
         <div class="fotter">
-          <a class="forgot">Forgot Password ?</a>
-          <a class="sing-up">SingUp</a>
+          <a>Forgot Password ?</a>
+          <a>Login</a>
         </div>
       </div>
     </div>
     <script>
       document
-        .querySelector(".button-group>button")
-        .addEventListener("click", () => {
-          const username = document.querySelector("#username").value;
-          const password = document.querySelector("#password").value;
-          fetch("/api/login", {
+        .querySelector(".button-group")
+        .addEventListener("click", async () => {
+          const data = new FormData();
+          data.append("username", document.querySelector("#username").value);
+          data.append("password", document.querySelector("#password").value);
+          data.append("name", document.querySelector("#name").value);
+          data.append("file", document.querySelector("#file").files[0]);
+
+          const response = await fetch("/api/akun", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username,
-              password,
-            }),
-          }).then(async (response) => {
-            if (response.ok) {
-              location.href = "/";
-            } else {
-              const message = await response.text();
-              alert(message);
-            }
+            body: data,
           });
+          alert(await response.text());
+          location.href = "/login";
         });
-      document
-        .querySelector(".sing-up")
-        .addEventListener("click", () => (location.href = "./daftar-login/"));
     </script>
   </body>
 </html>

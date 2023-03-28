@@ -66,7 +66,7 @@
         </span>
         <div id="serch">
           <input type="url" />
-          <!-- <img class="serch-right" src="" alt="dasdddasda" /> -->
+          <img class="serch-right" src="" alt="dasdddasda" />
         </div>
         <div class="teman"></div>
       </span>
@@ -93,6 +93,10 @@
       fetch("/api/me")
         .then((res) => res.json())
         .then((user) => {
+          const img =  document.querySelector(".serch-right");
+          console.log(img);
+          
+          img.src = `${user.photo}`;
           pengguna = user;
         });
       const teman = document.querySelector(".teman");
@@ -110,7 +114,7 @@
           a.className = `pesan-teman`;
           teman.appendChild(a);
         });
-
+        // const pengirim = [];
         const button = document.querySelectorAll("button");
         button.forEach((e, i) => {
           e.addEventListener("click", async () => {
@@ -119,6 +123,33 @@
             membuatBio(i);
             pesan(e);
             tompolKirim();
+            // pengirim = e;
+            setTimeout(() => {
+              document.kirim.onclick = async (i) => {
+                i.preventDefault();
+
+                const divUtama = document.querySelector(".container-pesan");
+                const div = document.createElement("div");
+                const divPesan = document.createElement("div");
+                const h3 = document.createElement("h3");
+
+                h3.textContent = document.kirim.pesan.value;
+                div.className = "user";
+
+                divPesan.appendChild(h3);
+                div.appendChild(divPesan);
+                divUtama.appendChild(div);
+                await fetch(`/api/tambah/pesan/${e.value}`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    pesan: document.kirim.pesan.value,
+                  }),
+                });
+              };
+            }, 1000);
           });
 
           e.addEventListener("dblclick", () => console.log("ok"));
@@ -176,8 +207,9 @@
           form.appendChild(button);
           div.appendChild(form);
           kontak.appendChild(div);
-        },1000);
+        }, 1000);
       }
+
       tampilkanTeman();
     </script>
   </body>
