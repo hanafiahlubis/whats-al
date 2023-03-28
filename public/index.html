@@ -10,11 +10,13 @@
         padding: 0;
         margin: 0;
       }
+      body {
+        display: grid;
+        height: 100vh;
+      }
       #countainer {
         background-color: darkgray;
         display: flex;
-        width: 80rem;
-        height: 17rem;
         justify-content: space-between;
       }
       #serch {
@@ -22,7 +24,7 @@
         display: flex;
       }
       #left-countain {
-        width: 25%;
+        width: 30%;
         background-color: aqua;
       }
       #right-countain {
@@ -47,6 +49,9 @@
         background: azure;
         flex-direction: column;
       }
+      /* #pesan-masuk{
+        display: none;
+      } */
     </style>
   </head>
   <body>
@@ -65,7 +70,6 @@
         </div>
         <div class="teman"></div>
       </span>
-
       <span id="right-countain">
         <div id="kontak">
           <div class="awal">
@@ -85,13 +89,16 @@
       let pengguna;
 
       const kontak = document.querySelector("#kontak");
+      const awal = document.querySelector(".awal");
       fetch("/api/me")
         .then((res) => res.json())
         .then((user) => {
           pengguna = user;
         });
       const teman = document.querySelector(".teman");
+
       const dataTeman = [];
+
       async function tampilkanTeman() {
         const res = await fetch("/api/teman");
         const data = await res.json();
@@ -107,43 +114,71 @@
         const button = document.querySelectorAll("button");
         button.forEach((e, i) => {
           e.addEventListener("click", async () => {
-            const awal = document.querySelector(".awal");
-            awal.style.display = "none";
-            membuatBio(i);
+            awal.innerHTML = "";
 
-            // pesan
+            membuatBio(i);
             pesan(e);
-            // console.log(data);
+            tompolKirim();
           });
+
+          e.addEventListener("dblclick", () => console.log("ok"));
         });
       }
       function membuatBio(index) {
+        kontak.innerHTML = "";
+
         const div = document.createElement("div");
+        const div2 = document.createElement("div");
         const h2 = document.createElement("h2");
+
         h2.textContent = dataTeman[index].username;
-        div.appendChild(h2);
+
+        div2.appendChild(h2);
+        div.appendChild(div2);
+
+        div.className = "herder-kontak";
         kontak.appendChild(div);
       }
-      tampilkanTeman();
-
       async function pesan(e) {
         const res = await fetch(`/api/tampil-pesan/${e.value}`);
         const data = await res.json();
-        console.log(data);
+        const divUtama = document.createElement("div");
+        divUtama.className = "container-pesan";
         data.forEach((e) => {
           const div = document.createElement("div");
           const divPesan = document.createElement("div");
           const h3 = document.createElement("h3");
+
           h3.textContent = e.pesan;
+
           divPesan.appendChild(h3);
           div.appendChild(divPesan);
-          kontak.appendChild(div);
+          divUtama.appendChild(div);
+
           e.id_pengirim === pengguna.id
             ? (div.className = "user")
             : (div.className = "penerima");
         });
-        // const
+        kontak.appendChild(divUtama);
       }
+      async function tompolKirim() {
+        setTimeout(() => {
+          const div = document.createElement("div");
+
+          const form = document.createElement("form");
+          form.name = "kirim";
+          const input = document.createElement("input");
+          input.setAttribute("type", "text");
+          input.name = "pesan";
+          const button = document.createElement("button");
+          button.textContent = "Kirim";
+          form.appendChild(input);
+          form.appendChild(button);
+          div.appendChild(form);
+          kontak.appendChild(div);
+        },1000);
+      }
+      tampilkanTeman();
     </script>
   </body>
 </html>
