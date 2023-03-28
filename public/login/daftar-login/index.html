@@ -154,67 +154,84 @@
     <div class="login-form-container">
       <div class="login-form">
         <h2>SingUp</h2>
-        <div class="input-group">
-          <i class="fa fa-user"></i>
-          <input
-            type="text"
-            placeholder="Username"
-            class="input-text"
-            autocomplete="off"
-            id="username"
-          />
-        </div>
-        <div class="input-group">
-          <i class="fa fa-unlock-alt"></i>
-          <input
-            type="password"
-            placeholder="Password"
-            class="input-text"
-            id="password"
-            autocomplete="off"
-          />
-        </div>
-        <div class="input-group">
-          <i class="fa fa-user"></i>
-          <input
-            type="text"
-            placeholder="Full Name"
-            class="input-text"
-            autocomplete="off"
-            id="name"
-          />
-        </div>
-        <div class="input-group">
-          <i class="fa fa-user"></i>
-          <input type="file" class="input-text" autocomplete="off" id="file" />
-        </div>
+        <form action="" name="kirim">
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input
+              type="text"
+              placeholder="Username"
+              class="input-text"
+              autocomplete="off"
+              name="username"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <i class="fa fa-unlock-alt"></i>
+            <input
+              type="password"
+              placeholder="Password"
+              class="input-text"
+              autocomplete="off"
+              name="password"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input
+              type="text"
+              placeholder="Full Name"
+              class="input-text"
+              autocomplete="off"
+              name="nama"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input
+              type="file"
+              class="input-text"
+              autocomplete="off"
+              name="file"
+              required
+            />
+          </div>
 
-        <div class="button-group" id="login-button">
-          <button>Submit</button>
-        </div>
+          <div class="button-group" id="login-button">
+            <button>Submit</button>
+          </div>
+        </form>
         <div class="fotter">
-          <a>Forgot Password ?</a>
-          <a>Login</a>
+          <a class="forgot">Forgot Password ?</a>
+          <a class="login">Login</a>
         </div>
       </div>
     </div>
     <script>
-      document
-        .querySelector(".button-group")
-        .addEventListener("click", async () => {
-          const data = new FormData();
-          data.append("username", document.querySelector("#username").value);
-          data.append("password", document.querySelector("#password").value);
-          data.append("name", document.querySelector("#name").value);
-          data.append("file", document.querySelector("#file").files[0]);
+      document.kirim.onsubmit = async (e) => {
+        e.preventDefault();
+        const data = new FormData();
+        data.append("username", document.kirim.username.value);
+        data.append("password", document.kirim.password.value);
+        data.append("name", document.kirim.nama.value);
+        data.append("file", document.kirim.file.files[0]);
 
-          const response = await fetch("/api/akun", {
-            method: "POST",
-            body: data,
-          });
-          alert(await response.text());
-          location.href = "/login";
+        const response = await fetch("/api/akun", {
+          method: "POST",
+          body: data,
         });
+        alert(await response.text());
+        if (response.ok) location.href = "/login";
+      };
+
+      document
+        .querySelector(".forgot")
+        .addEventListener("click", () => (location.href = "../lupa-password/"));
+      document
+        .querySelector(".login")
+        .addEventListener("click", () => (location.href = "/login"));
     </script>
   </body>
 </html>

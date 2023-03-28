@@ -37,12 +37,27 @@ app.post("/api/akun", type, async (req, res) => {
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(req.body.password, salt);
     await client.query(
-      `INSERT INTO akun VALUES (default,'${req.body.username}', '${hash}','${req.body.nama_lengkap}','${req.file.filename}')`
+      `INSERT INTO akun VALUES (default,'${req.body.username}', '${hash}','${req.body.name}','${req.file.filename}')`
     );
     res.send("Akun berhasil ditambahkan.");
   }
 });
+// edit
+app.put("/api/edit-password/akun", async (req, res) => {
+  const result = await client.query(`select * from akun where username = '${req.body.username}'`);
+  if (result.rows.length > 0) {
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(req.body.password, salt);
+    await client.query(`update akun set password = '${hash}'where username = '${req.body.username}'`);
 
+    res.status(200);
+    res.send("Berhasil Di edit");
+  } else {
+
+    res.send("Username Tidak Ada");
+    res.status(401);
+  }
+});
 app.use(cookieParser());
 
 app.use((req, res, next) => {
@@ -81,22 +96,7 @@ app.use((req, res, next) => {
 });
 
 
-// edit
-app.put("/api/edit-password/akun", async (req, res) => {
-  const result = await client.query(`select username from akun where username = '${req.body.username}'`);
-  let a = 0; (result.rows.length > 0) && a++;
 
-  if (!a === 0) {
-    const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(req.body.password, salt);
-    await client.query(
-      `update akun set password = '${hash}'where username = '${req.body.username}'`
-    );
-    res.send("Berhasil Di edit");
-  } else {
-    res.send("Username Tidak Ada");
-  }
-});
 // Untuk mengakses file statis
 // app.use(express.static("public"));
 
@@ -108,7 +108,9 @@ app.post("/api/login", async (req, res) => {
   if (results.rows.length > 0) {
     if (await bcrypt.compare(req.body.password, results.rows[0].password)) {
       const token = jwt.sign(results.rows[0], process.env.SECRET_KEY);
+      console.log(token);
       res.cookie("token", token);
+      res.me = jwt.verify(req.cookies.token, process.env.SECRET_KEY);
       res.send("Login berhasil.");
     } else {
       res.status(401);
@@ -135,10 +137,8 @@ app.get("/api/tampil-pesan/:id", async (req, res) => {
   res.json(data.rows);
 });
 app.post("/api/tambah/pesan/:id", async (req, _res) => {
-  console.log(req.body);
   const idPenerima = parseInt(req.params.id);
-  await client.query(`insert into pesan values(default,${req.me.id},${idPenerima},now(), '${req.body.pesan}','false') `)
-  console.log("berhasil");
+  await client.query(`insert into pesan values(default,${req.me.id},${idPenerima},now(), '${req.body.pesan}','false')`)
 });
 
 app.listen(3000, () => {

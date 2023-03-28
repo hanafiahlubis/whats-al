@@ -49,9 +49,6 @@
         background: azure;
         flex-direction: column;
       }
-      /* #pesan-masuk{
-        display: none;
-      } */
     </style>
   </head>
   <body>
@@ -93,11 +90,9 @@
       fetch("/api/me")
         .then((res) => res.json())
         .then((user) => {
-          const img =  document.querySelector(".serch-right");
-          console.log(img);
-          
-          img.src = `${user.photo}`;
-          pengguna = user;
+          console.log(user);
+          // img.src = `${user.photo}`;
+          // pengguna = user;
         });
       const teman = document.querySelector(".teman");
 

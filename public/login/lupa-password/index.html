@@ -153,63 +153,75 @@
   <body>
     <div class="login-form-container">
       <div class="login-form">
-        <h2>Login</h2>
-        <div class="input-group">
-          <i class="fa fa-user"></i>
-          <input
-            type="text"
-            placeholder="Username"
-            class="input-text"
-            autocomplete="off"
-            id="username"
-          />
-        </div>
-        <div class="input-group">
-          <i class="fa fa-unlock-alt"></i>
-          <input
-            type="password"
-            placeholder="Password"
-            class="input-text"
-            id="password"
-            autocomplete="off"
-          />
-        </div>
-        <div class="button-group" id="login-button">
-          <button>Submit</button>
-        </div>
+        <h2>Forgot Password</h2>
+        <form action="" name="kirim">
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input
+              type="text"
+              placeholder="Username"
+              class="input-text"
+              autocomplete="off"
+              autofocus
+              name="username"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <i class="fa fa-unlock-alt"></i>
+            <input
+              type="password"
+              placeholder="Password"
+              class="input-text"
+              autocomplete="off"
+              name="password"
+              required
+            />
+          </div>
+          <div class="button-group" id="login-button">
+            <button>Submit</button>
+          </div>
+        </form>
         <div class="fotter">
-          <a class="forgot">Forgot Password ?</a>
+          <a class="login">Login</a>
           <a class="sing-up">SingUp</a>
         </div>
       </div>
     </div>
     <script>
-      document
-        .querySelector(".button-group>button")
-        .addEventListener("click", () => {
-          const username = document.querySelector("#username").value;
-          const password = document.querySelector("#password").value;
-          fetch("/api/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username,
-              password,
-            }),
-          }).then(async (response) => {
-            if (response.ok) {
-              location.href = "/";
-            } else {
-              const message = await response.text();
-              alert(message);
-            }
-          });
+      document.kirim.onclick = async (e) => {
+        e.preventDefault();
+        const username = document.kirim.username.value;
+        const password = document.kirim.password.value;
+        const res = await fetch("/api/edit-password/akun", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
         });
+        let data;
+        if (res.ok) {
+          data = await res.text();
+          alert(data);
+          location.href = "/login";
+        } else {
+          data = await res.text();
+          console.log(data);
+          alert(data);
+          document.querySelector("#username").value = "";
+          document.querySelector("#password").value = "";
+        }
+      };
       document
         .querySelector(".sing-up")
-        .addEventListener("click", () => (location.href = "./daftar-login/"));
+        .addEventListener("click", () => (location.href = "../daftar-login/"));
+      document
+        .querySelector(".login")
+        .addEventListener("click", () => (location.href = "/login"));
     </script>
   </body>
 </html>
