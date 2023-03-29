@@ -8,7 +8,6 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcryptjs";
 import multer from "multer";
-
 const upload = multer({ dest: "public/photos" });
 
 const type = upload.single('file')
@@ -23,6 +22,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 import path from "path";
+import { readdir } from "fs/promises";
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.use(express.static(path.resolve(__dirname, "public")));
 
@@ -67,7 +67,7 @@ app.use((req, res, next) => {
     let authorized = false;
     if (req.cookies.token) {
       try {
-        jwt.verify(req.cookies.token, process.env.SECRET_KEY);
+        req.me = jwt.verify(req.cookies.token, process.env.SECRET_KEY);
         authorized = true;
       } catch (err) {
         res.setHeader("Cache-Control", "no-store"); // khusus Vercel
@@ -108,9 +108,7 @@ app.post("/api/login", async (req, res) => {
   if (results.rows.length > 0) {
     if (await bcrypt.compare(req.body.password, results.rows[0].password)) {
       const token = jwt.sign(results.rows[0], process.env.SECRET_KEY);
-      console.log(token);
       res.cookie("token", token);
-      res.me = jwt.verify(req.cookies.token, process.env.SECRET_KEY);
       res.send("Login berhasil.");
     } else {
       res.status(401);
@@ -124,11 +122,14 @@ app.post("/api/login", async (req, res) => {
 
 // dapatkan username yang login
 app.get("/api/me", (req, res) => {
-  console.log(req.me);
   res.json(req.me);
 });
 app.get("/api/teman", async (_req, res) => {
   const results = await client.query("select * from akun order by id asc ");
+  res.send(results.rows);
+});
+app.get("/api/bio/:id", async (_req, res) => {
+  const results = await client.query("select * from akun");
   res.send(results.rows);
 });
 app.get("/api/tampil-pesan/:id", async (req, res) => {

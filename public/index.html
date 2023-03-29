@@ -9,27 +9,39 @@
       * {
         padding: 0;
         margin: 0;
+        color: #00ccff;
       }
       body {
         display: grid;
         height: 100vh;
       }
       #countainer {
-        background-color: darkgray;
+        background-color: #0c1022;
         display: flex;
         justify-content: space-between;
       }
       #serch {
-        background-color: aquamarine;
         display: flex;
+        justify-content: center;
+
+        border-bottom: 1px solid #ee00ff;
+      }
+      #serch > input {
+        width: 16rem;
       }
       #left-countain {
         width: 30%;
-        background-color: aqua;
+        border-right: 1px solid #ee00ff;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .header {
+        padding: 8px;
+        border-bottom: 1px solid #ee00ff;
       }
       #right-countain {
         width: 100%;
-        background-color: blue;
       }
       .photo {
         width: 70px;
@@ -39,9 +51,15 @@
         height: 80px;
       }
       .pesan-teman {
-        display: block;
+        display: flex;
         cursor: pointer;
+        align-items: center;
+        border-bottom: 1px solid #ee00ff;
       }
+      .pesan-teman > div {
+        padding: 10px;
+      }
+
       .user {
         display: flex;
         justify-items: center;
@@ -49,21 +67,63 @@
         background: azure;
         flex-direction: column;
       }
+      img {
+        width: 49px;
+        height: 49px;
+        border-radius: 50%;
+      }
+      .header > img {
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+      }
+      .teman {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      a {
+        height: 50px;
+      }
+      #kontak {
+        height: 100%;
+        display: flex;
+        /* text-align: center; */
+        justify-content: space-between;
+        flex-direction: column;
+      }
+      .container-pesan {
+        background: aqua;
+        gap: 2px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      .container-pesann {
+        overflow-y: auto;
+        height: 84vh;
+        display: grid;
+      }
+      .herder-kontak {
+        display: flex;
+        height: 60px;
+        align-items: center;
+      }
+
+      .herder-kontak > img {
+        margin: 0 3.2% 0 0;
+      }
     </style>
   </head>
   <body>
     <div id="countainer">
       <span id="left-countain">
         <span class="header">
-          <span>profil</span>
-          <span>kumunitas</span>
-          <span>status</span>
-          <span>chet baru</span>
-          <span>Menu</span>
+          <img src="" alt="tidak masuk" />
         </span>
         <div id="serch">
           <input type="url" />
-          <img class="serch-right" src="" alt="dasdddasda" />
+          <!-- <img class="serch-right" alt="dasdddasda" /> -->
         </div>
         <div class="teman"></div>
       </span>
@@ -87,15 +147,16 @@
 
       const kontak = document.querySelector("#kontak");
       const awal = document.querySelector(".awal");
+      const img = document.querySelector(".header>img");
       fetch("/api/me")
         .then((res) => res.json())
         .then((user) => {
+          pengguna = user;
           console.log(user);
-          // img.src = `${user.photo}`;
-          // pengguna = user;
+          img.src = `/photos/${user.photo}`;
         });
       const teman = document.querySelector(".teman");
-
+      img.addEventListener("click", () => (location.href = "profil"));
       const dataTeman = [];
 
       async function tampilkanTeman() {
@@ -103,14 +164,30 @@
         const data = await res.json();
         data.forEach((e, i) => {
           dataTeman[i] = e;
-          const a = document.createElement("button");
-          a.textContent = e.nama_lengkap;
+          console.log(e);
+          const a = document.createElement("a");
+
+          const divImg = document.createElement("div");
+          const img = document.createElement("img");
+
+          img.src = `/photos/${e.photo}`;
+          img.alt = "Img Tidak ada";
+          divImg.appendChild(img);
+
+          const div = document.createElement("div");
+          const h3 = document.createElement("h3");
+          // a.textContent = e.nama_lengkap;
+          h3.textContent = e.nama_lengkap;
+          div.appendChild(h3);
+          a.appendChild(divImg);
+          a.appendChild(div);
           a.value = e.id;
           a.className = `pesan-teman`;
+
           teman.appendChild(a);
         });
         // const pengirim = [];
-        const button = document.querySelectorAll("button");
+        const button = document.querySelectorAll("a");
         button.forEach((e, i) => {
           e.addEventListener("click", async () => {
             awal.innerHTML = "";
@@ -118,7 +195,6 @@
             membuatBio(i);
             pesan(e);
             tompolKirim();
-            // pengirim = e;
             setTimeout(() => {
               document.kirim.onclick = async (i) => {
                 i.preventDefault();
@@ -134,15 +210,17 @@
                 divPesan.appendChild(h3);
                 div.appendChild(divPesan);
                 divUtama.appendChild(div);
-                await fetch(`/api/tambah/pesan/${e.value}`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    pesan: document.kirim.pesan.value,
-                  }),
-                });
+                setTimeout(async () => {
+                  await fetch(`/api/tambah/pesan/${e.value}`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      pesan: document.kirim.pesan.value,
+                    }),
+                  });
+                }, 1000);
               };
             }, 1000);
           });
@@ -156,10 +234,13 @@
         const div = document.createElement("div");
         const div2 = document.createElement("div");
         const h2 = document.createElement("h2");
+        const img = document.createElement("img");
 
+        img.src = `/photos/${dataTeman[index].photo}`;
         h2.textContent = dataTeman[index].username;
 
         div2.appendChild(h2);
+        div.appendChild(img);
         div.appendChild(div2);
 
         div.className = "herder-kontak";
@@ -169,7 +250,9 @@
         const res = await fetch(`/api/tampil-pesan/${e.value}`);
         const data = await res.json();
         const divUtama = document.createElement("div");
-        divUtama.className = "container-pesan";
+        divUtama.className = "container-pesann";
+        const divUtama2 = document.createElement("div");
+        divUtama2.className = "container-pesan";
         data.forEach((e) => {
           const div = document.createElement("div");
           const divPesan = document.createElement("div");
@@ -179,12 +262,13 @@
 
           divPesan.appendChild(h3);
           div.appendChild(divPesan);
-          divUtama.appendChild(div);
+          divUtama2.appendChild(div);
 
           e.id_pengirim === pengguna.id
             ? (div.className = "user")
             : (div.className = "penerima");
         });
+        divUtama.appendChild(divUtama2);
         kontak.appendChild(divUtama);
       }
       async function tompolKirim() {

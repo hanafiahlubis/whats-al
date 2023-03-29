@@ -20,7 +20,7 @@
         letter-spacing: 1px;
         background-color: #0c1022;
       }
-      .login-form-container {
+      .container {
         position: relative;
         width: 400px;
         height: 470px;
@@ -34,7 +34,7 @@
         overflow: hidden;
         margin-top: 70px;
       }
-      .login-form-container::before {
+      .container::before {
         position: absolute;
         width: 170%;
         height: 170%;
@@ -47,7 +47,7 @@
         );
         animation: rotate_border 6s linear infinite;
       }
-      .login-form-container::after {
+      .container::after {
         position: absolute;
         width: 170%;
         height: 170%;
@@ -69,7 +69,7 @@
           transform: rotate(360deg);
         }
       }
-      .login-form {
+      .profil {
         position: absolute;
         content: "";
         background-color: #0c1022;
@@ -79,36 +79,11 @@
         z-index: 10;
         color: #00ccff;
       }
-      h2 {
-        font-size: 40px;
-        font-weight: 600;
-        text-align: center;
-      }
-      .input-group {
-        margin-top: 40px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: start;
-      }
-      .input-text {
-        width: 95%;
-        height: 30px;
-        background: transparent;
-        border: none;
-        outline: none;
-        border-bottom: 1px solid #00ccff;
-        font-size: 20px;
-        padding-left: 10px;
-        color: #00ccff;
-      }
+
       ::placeholder {
         font-size: 15px;
         color: #00ccff52;
         letter-spacing: 1px;
-      }
-      .fa {
-        font-size: 20px;
       }
       #login-button {
         position: relative;
@@ -134,41 +109,80 @@
         align-items: center;
         color: #00ccff;
       }
-      .fotter {
-        margin-top: 30px;
-        display: flex;
-        justify-content: space-between;
+      img {
+        height: 80px;
+        width: 80px;
       }
-      .fotter a {
+      .input-group {
+        margin-top: 40px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+      }
+      .input-text {
+        width: 95%;
+        height: 30px;
+        background: transparent;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #00ccff;
+        font-size: 20px;
+        padding-left: 10px;
+        color: #00ccff;
+      }
+      #login-button {
+        position: relative;
+        width: 300px;
+        height: 40px;
+        transition: 1s;
+        margin-top: 70px;
+      }
+      #login-button button {
+        position: absolute;
+        width: 100%;
+        height: 100%;
         text-decoration: none;
+        z-index: 10;
         cursor: pointer;
-        font-size: 18px;
+        font-size: 22px;
+        letter-spacing: 2px;
+        border: 1px solid #00ccff;
+        border-radius: 50px;
+        background-color: #0c1022;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #00ccff;
       }
     </style>
   </head>
   <body>
-    <div class="login-form-container">
-      <div class="login-form">
-        <h2>Login</h2>
-        <form action="" name="kirim">
+    <div class="container">
+      <div class="profil">
+        <h2>Profil</h2>
+        <div class="header">
+          <img src="" alt="" />
+        </div>
+        <form name="bio">
           <div class="input-group">
-            <i class="fa fa-user"></i>
+            <i class="fa fa-unlock-alt"></i>
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Nama Lengkap"
               class="input-text"
-              autocomplete="off"
+              name="nama"
               required
-              name="username"
+              autocomplete="off"
             />
           </div>
           <div class="input-group">
             <i class="fa fa-unlock-alt"></i>
             <input
-              type="password"
-              placeholder="Password"
+              type="text"
+              placeholder="Username"
               class="input-text"
-              name="password"
+              name="username"
               required
               autocomplete="off"
             />
@@ -176,42 +190,23 @@
           <div class="button-group" id="login-button">
             <button>Submit</button>
           </div>
-          <div class="fotter">
-            <a class="forgot">Forgot Password ?</a>
-            <a class="sing-up">SingUp</a>
-          </div>
         </form>
       </div>
     </div>
     <script>
-      document.kirim.onsubmit = (e) => {
-        e.preventDefault();
-        const username = document.kirim.username.value;
-        const password = document.kirim.password.value;
-        fetch("/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            password,
-          }),
-        }).then(async (response) => {
-          if (response.ok) {
-            location.href = "/";
-          } else {
-            const message = await response.text();
-            alert(message);
-          }
+      const img = document.querySelector(".header>img");
+      fetch("/api/me")
+        .then((res) => res.json())
+        .then((user) => {
+          pengguna = user;
+          img.src = `/photos/${user.photo}`;
+          document.bio.nama.value = user.nama_lengkap;
+          document.bio.username.value = user.username;
         });
+
+      document.bio.onsubmit = (e) => {
+        e.preventDefault();
       };
-      document
-        .querySelector(".sing-up")
-        .addEventListener("click", () => (location.href = "./daftar-login/"));
-      document
-        .querySelector(".forgot")
-        .addEventListener("click", () => (location.href = "./lupa-password/"));
     </script>
   </body>
 </html>
