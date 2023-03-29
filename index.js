@@ -22,7 +22,6 @@ app.use(express.json());
 app.use(express.static("public"));
 
 import path from "path";
-import { readdir } from "fs/promises";
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.use(express.static(path.resolve(__dirname, "public")));
 
@@ -121,25 +120,38 @@ app.post("/api/login", async (req, res) => {
 });
 
 // dapatkan username yang login
-app.get("/api/me", (req, res) => {
+app.get("/api/me", async (req, res) => {
+  const result = await client.query(`select * from akun where id = ${req.me.id}`);
+  req.me = result.rows[0];
   res.json(req.me);
 });
 app.get("/api/teman", async (_req, res) => {
   const results = await client.query("select * from akun order by id asc ");
   res.send(results.rows);
 });
-app.get("/api/bio/:id", async (_req, res) => {
-  const results = await client.query("select * from akun");
-  res.send(results.rows);
+app.put("/api/bio", async (req, res) => {
+  await client.query(`UPDATE akun set nama_lengkap = '${req.body.nama}',username = '${req.body.username}'  where id = ${req.me.id}`);
+  res.send("ok");
 });
-app.get("/api/tampil-pesan/:id", async (req, res) => {
+app.get("/api/pesan/:id", async (req, res) => {
   const idPenerima = parseInt(req.params.id);
   const data = await client.query(`select * from pesan where id_pengirim = ${req.me.id} AND id_penerima = ${idPenerima} or id_pengirim = ${idPenerima} AND id_penerima = ${req.me.id} order by tanggal_waktu asc`)
   res.json(data.rows);
 });
-app.post("/api/tambah/pesan/:id", async (req, _res) => {
+app.get("/api/pesan-baru/:id", async (req, res) => {
+  const idPengirim = parseInt(req.params.id);
+  const data = await client.query(`select * from pesan where id_pengirim = ${idPengirim} AND id_penerima = ${req.me.id} and baca = false order by tanggal_waktu asc`)
+  res.json(data.rows);
+});
+app.post("/api/tambah/pesan/:id", async (req, res) => {
   const idPenerima = parseInt(req.params.id);
   await client.query(`insert into pesan values(default,${req.me.id},${idPenerima},now(), '${req.body.pesan}','false')`)
+  res.sendStatus(200);
+});
+
+app.put("/api/baca/:id", async (req, res) => {
+  await client.query(`update pesan set baca = true where id = ${req.params.id}`);
+  res.sendStatus(200);
 });
 
 app.listen(3000, () => {

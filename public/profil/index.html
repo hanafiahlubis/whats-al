@@ -195,17 +195,39 @@
     </div>
     <script>
       const img = document.querySelector(".header>img");
+      let pengguna = "";
       fetch("/api/me")
         .then((res) => res.json())
         .then((user) => {
-          pengguna = user;
+          console.log(user);
           img.src = `/photos/${user.photo}`;
           document.bio.nama.value = user.nama_lengkap;
           document.bio.username.value = user.username;
+          pengguna = user;
         });
 
-      document.bio.onsubmit = (e) => {
+      document.bio.onsubmit = async (e) => {
         e.preventDefault();
+        console.log(document.bio.username.value);
+        if (
+          pengguna.nama_lengkap !== document.bio.nama.value ||
+          document.bio.username.value !== pengguna.username
+        ) {
+          await fetch(`/api/bio`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: document.bio.username.value,
+              nama: document.bio.nama.value,
+            }),
+          });
+          document.cookie;
+          alert("ok");
+        } else {
+          alert("Tidak ada yang di ubah");
+        }
       };
     </script>
   </body>

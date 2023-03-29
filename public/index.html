@@ -14,8 +14,6 @@
       body {
         display: grid;
         height: 100vh;
-      }
-      #countainer {
         background-color: #0c1022;
         display: flex;
         justify-content: space-between;
@@ -41,7 +39,15 @@
         border-bottom: 1px solid #ee00ff;
       }
       #right-countain {
-        width: 100%;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      #right-countain > form {
+        display: flex;
+      }
+      #right-countain > form > input {
+        flex-grow: 1;
       }
       .photo {
         width: 70px;
@@ -59,12 +65,13 @@
       .pesan-teman > div {
         padding: 10px;
       }
-
-      .user {
-        display: flex;
-        justify-items: center;
-        align-items: flex-end;
+      .penerima {
+        align-self: flex-start;
         background: azure;
+      }
+      .user {
+        align-self: flex-end;
+        background: green;
         flex-direction: column;
       }
       img {
@@ -85,24 +92,16 @@
       a {
         height: 50px;
       }
-      #kontak {
-        height: 100%;
-        display: flex;
-        /* text-align: center; */
-        justify-content: space-between;
-        flex-direction: column;
-      }
       .container-pesan {
         background: aqua;
         gap: 2px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
-      }
-      .container-pesann {
         overflow-y: auto;
-        height: 84vh;
-        display: grid;
+        flex-grow: 1;
+      }
+      .container-pesan > div:first-child {
+        margin-top: auto;
       }
       .herder-kontak {
         display: flex;
@@ -116,36 +115,32 @@
     </style>
   </head>
   <body>
-    <div id="countainer">
-      <span id="left-countain">
-        <span class="header">
-          <img src="" alt="tidak masuk" />
-        </span>
-        <div id="serch">
-          <input type="url" />
-          <!-- <img class="serch-right" alt="dasdddasda" /> -->
-        </div>
-        <div class="teman"></div>
+    <span id="left-countain">
+      <span class="header">
+        <img src="" alt="tidak masuk" />
       </span>
-      <span id="right-countain">
-        <div id="kontak">
-          <div class="awal">
-            <!-- <div class="photo"><img src="../phote/countai.jpg" alt="" /></div> -->
-            <h1>WhatsApp Web</h1>
-            <p>
-              kirim dan terima pesan tanpa perlu menghubungkan telepon Anda ke
-              Intenet <br />
-              Gunakan WhatsApp di maksimal 4 perangkat tertaut dan 1 telepon
-              sekaligun.
-            </p>
-          </div>
-        </div>
-      </span>
-    </div>
+      <div id="serch">
+        <input type="url" />
+        <!-- <img class="serch-right" alt="dasdddasda" /> -->
+      </div>
+      <div class="teman"></div>
+    </span>
+    <span id="right-countain">
+      <div class="awal">
+        <!-- <div class="photo"><img src="../phote/countai.jpg" alt="" /></div> -->
+        <h1>WhatsApp Web</h1>
+        <p>
+          kirim dan terima pesan tanpa perlu menghubungkan telepon Anda ke
+          Intenet <br />
+          Gunakan WhatsApp di maksimal 4 perangkat tertaut dan 1 telepon
+          sekaligun.
+        </p>
+      </div>
+    </span>
     <script>
       let pengguna;
 
-      const kontak = document.querySelector("#kontak");
+      const kontak = document.querySelector("#right-countain");
       const awal = document.querySelector(".awal");
       const img = document.querySelector(".header>img");
       fetch("/api/me")
@@ -186,44 +181,14 @@
 
           teman.appendChild(a);
         });
-        // const pengirim = [];
-        const button = document.querySelectorAll("a");
-        button.forEach((e, i) => {
-          e.addEventListener("click", async () => {
+        const buttons = document.querySelectorAll("a");
+        buttons.forEach((e, i) => {
+          e.onclick = async () => {
             awal.innerHTML = "";
 
             membuatBio(i);
             pesan(e);
-            tompolKirim();
-            setTimeout(() => {
-              document.kirim.onclick = async (i) => {
-                i.preventDefault();
-
-                const divUtama = document.querySelector(".container-pesan");
-                const div = document.createElement("div");
-                const divPesan = document.createElement("div");
-                const h3 = document.createElement("h3");
-
-                h3.textContent = document.kirim.pesan.value;
-                div.className = "user";
-
-                divPesan.appendChild(h3);
-                div.appendChild(divPesan);
-                divUtama.appendChild(div);
-                setTimeout(async () => {
-                  await fetch(`/api/tambah/pesan/${e.value}`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      pesan: document.kirim.pesan.value,
-                    }),
-                  });
-                }, 1000);
-              };
-            }, 1000);
-          });
+          };
 
           e.addEventListener("dblclick", () => console.log("ok"));
         });
@@ -246,13 +211,12 @@
         div.className = "herder-kontak";
         kontak.appendChild(div);
       }
+
       async function pesan(e) {
-        const res = await fetch(`/api/tampil-pesan/${e.value}`);
+        const res = await fetch(`/api/pesan/${e.value}`);
         const data = await res.json();
         const divUtama = document.createElement("div");
-        divUtama.className = "container-pesann";
-        const divUtama2 = document.createElement("div");
-        divUtama2.className = "container-pesan";
+        divUtama.className = "container-pesan";
         data.forEach((e) => {
           const div = document.createElement("div");
           const divPesan = document.createElement("div");
@@ -262,31 +226,90 @@
 
           divPesan.appendChild(h3);
           div.appendChild(divPesan);
-          divUtama2.appendChild(div);
+          divUtama.appendChild(div);
 
-          e.id_pengirim === pengguna.id
-            ? (div.className = "user")
-            : (div.className = "penerima");
+          if (e.id_pengirim === pengguna.id) {
+            div.className = "user";
+          } else {
+            div.className = "penerima";
+            if (!e.baca) {
+              fetch(`/api/baca/${e.id}`, { method: "PUT" });
+            }
+          }
         });
-        divUtama.appendChild(divUtama2);
         kontak.appendChild(divUtama);
-      }
-      async function tompolKirim() {
-        setTimeout(() => {
-          const div = document.createElement("div");
+        tompolKirim(e.value, divUtama);
+        divUtama.scrollTo(0, divUtama.scrollHeight);
+        setInterval(async () => {
+          const res = await fetch(`/api/pesan-baru/${e.value}`);
+          const data = await res.json();
+          data.forEach((e) => {
+            console.log(e);
+            const div = document.createElement("div");
+            const divPesan = document.createElement("div");
+            const h3 = document.createElement("h3");
 
-          const form = document.createElement("form");
-          form.name = "kirim";
-          const input = document.createElement("input");
-          input.setAttribute("type", "text");
-          input.name = "pesan";
-          const button = document.createElement("button");
-          button.textContent = "Kirim";
-          form.appendChild(input);
-          form.appendChild(button);
-          div.appendChild(form);
-          kontak.appendChild(div);
+            h3.textContent = e.pesan;
+
+            divPesan.appendChild(h3);
+            div.appendChild(divPesan);
+            divUtama.appendChild(div);
+
+            if (e.id_pengirim === pengguna.id) {
+              div.className = "user";
+              // if (e.id_pengirim === e.id_penerima && !e.baca) {
+              //   console.log("dsds");
+              //   fetch(`/api/baca/${e.id}`, { method: "PUT" });
+              // }
+            } else {
+              div.className = "penerima";
+              if (!e.baca) {
+                fetch(`/api/baca/${e.id}`, { method: "PUT" });
+              }
+            }
+            divUtama.scrollTo(0, divUtama.scrollHeight);
+          });
         }, 1000);
+      }
+
+      async function tompolKirim(id, divUtama) {
+        const form = document.createElement("form");
+        form.name = "kirim";
+        const input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.name = "pesan";
+        const button = document.createElement("button");
+        button.textContent = "Kirim";
+        form.onsubmit = async (i) => {
+          i.preventDefault();
+          input.disabled = true;
+          const divUtama = document.querySelector(".container-pesan");
+          const div = document.createElement("div");
+          const divPesan = document.createElement("div");
+          const h3 = document.createElement("h3");
+
+          h3.textContent = document.kirim.pesan.value;
+          div.className = "user";
+
+          divPesan.appendChild(h3);
+          div.appendChild(divPesan);
+          divUtama.appendChild(div);
+          await fetch(`/api/tambah/pesan/${id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              pesan: document.kirim.pesan.value,
+            }),
+          });
+          divUtama.scrollTo(0, divUtama.scrollHeight);
+          input.value = "";
+          input.disabled = false;
+        };
+        form.appendChild(input);
+        form.appendChild(button);
+        kontak.appendChild(form);
       }
 
       tampilkanTeman();
