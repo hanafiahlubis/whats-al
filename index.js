@@ -153,6 +153,14 @@ app.put("/api/baca/:id", async (req, res) => {
   await client.query(`update pesan set baca = true where id = ${req.params.id}`);
   res.sendStatus(200);
 });
+app.post("/api/story", type, async (req, res) => {
+  await client.query(`insert into story values(DEFAULT,${req.me.id},'${req.file.filename}','${req.body.caption}')`);
+  res.sendStatus(200);
+});
+app.get("/api/story", async (_req, res) => {
+  await client.query(`select * from story')`);
+  res.sendStatus(200);
+});
 
 app.listen(3000, () => {
   console.log("Server berhasil berjalan.");
