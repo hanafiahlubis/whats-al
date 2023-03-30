@@ -11,6 +11,16 @@
         padding: 0;
         box-sizing: border-box;
       }
+      h2 {
+        font-size: 40px;
+        font-weight: 600;
+        text-align: center;
+      }
+      .header {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+      }
       body {
         width: 100%;
         height: 100%;
@@ -23,9 +33,9 @@
       .container {
         position: relative;
         width: 400px;
-        height: 470px;
+        height: 487px;
         max-width: 400px;
-        max-height: 470px;
+        max-height: 487px;
         background: #040717;
         border-radius: 50px 5px;
         display: flex;
@@ -112,6 +122,8 @@
       img {
         height: 80px;
         width: 80px;
+        object-fit: cover;
+        border-radius: 100%;
       }
       .input-group {
         margin-top: 40px;
@@ -166,26 +178,31 @@
         </div>
         <form name="bio">
           <div class="input-group">
-            <i class="fa fa-unlock-alt"></i>
-            <input
-              type="text"
-              placeholder="Nama Lengkap"
-              class="input-text"
-              name="nama"
-              required
-              autocomplete="off"
-            />
+            <label for="">
+              Name Full<i class="fa fa-unlock-alt"></i>
+              <input
+                type="text"
+                placeholder="Nama Lengkap"
+                class="input-text"
+                name="nama"
+                required
+                autocomplete="off"
+              />
+            </label>
           </div>
           <div class="input-group">
-            <i class="fa fa-unlock-alt"></i>
-            <input
-              type="text"
-              placeholder="Username"
-              class="input-text"
-              name="username"
-              required
-              autocomplete="off"
-            />
+            <label for="">
+              Username
+              <i class="fa fa-unlock-alt"></i>
+              <input
+                type="text"
+                placeholder="Username"
+                class="input-text"
+                name="username"
+                required
+                autocomplete="off"
+              />
+            </label>
           </div>
           <div class="button-group" id="login-button">
             <button>Submit</button>
@@ -223,7 +240,6 @@
               nama: document.bio.nama.value,
             }),
           });
-          document.cookie;
           alert("ok");
         } else {
           alert("Tidak ada yang di ubah");

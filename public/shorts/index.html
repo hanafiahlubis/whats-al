@@ -17,76 +17,15 @@
         background-color: #0c1022;
         display: flex;
         justify-content: space-between;
-        font-family: "Lato", sans-serif;
-      }
-
-      .sidepanel {
-        width: 0;
-        position: fixed;
-        z-index: 100;
-        height: 250px;
-        top: 0;
-        left: 0;
-        background-color: #0c1022;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top: 60px;
-        overflow: hidden;
-      }
-
-      .sidepanel a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        display: block;
-        transition: 0.3s;
-      }
-
-      .sidepanel a:hover {
-        color: #ee00ff;
-      }
-
-      .sidepanel .close-btn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-      }
-
-      .open-btn {
-        font-size: 20px;
-        cursor: pointer;
-        background-color: #0c1022;
-        padding: 10px 15px;
-        border: none;
-      }
-
-      .open-btn:hover {
-        background-color: #444;
-      }
-      .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
       }
       #serch {
         display: flex;
         justify-content: center;
-        padding: 10px;
+
         border-bottom: 1px solid #ee00ff;
       }
       #serch > input {
         width: 16rem;
-        background-color: transparent;
-        outline: none;
-        border: none;
-
-        border-bottom: 1px solid;
-      }
-
-      ::placeholder {
-        color: #00ccff;
-        text-align: center;
       }
       #left-countain {
         width: 30%;
@@ -129,28 +68,11 @@
       .penerima {
         align-self: flex-start;
         background: azure;
-
-        background-color: #444;
-        padding: 15px 30px;
-        /* background-color: rgb(47, 139, 47); */
-        border-radius: 15px;
-        border-bottom-left-radius: 0px;
-      }
-      .penerima * {
-        color: white;
       }
       .user {
         align-self: flex-end;
-        /* background: green; */
+        background: green;
         flex-direction: column;
-
-        background-color: #176b5b;
-        padding: 15px 30px;
-        border-radius: 15px;
-        border-bottom-right-radius: 0px;
-      }
-      .user * {
-        color: white;
       }
       img {
         width: 49px;
@@ -172,7 +94,7 @@
         height: 50px;
       }
       .container-pesan {
-        /* background: aqua; */
+        background: aqua;
         gap: 2px;
         display: flex;
         flex-direction: column;
@@ -194,51 +116,17 @@
     </style>
   </head>
   <body>
+    <video controls>
+      <source src="../profil/a.mp4" type="video/mp4" />
+    </video>
     <span id="left-countain">
       <span class="header">
         <img src="" alt="tidak masuk" />
-
-        <div id="my-sidepanel" class="sidepanel">
-          <a href="javascript:void(0)" class="close-btn">×</a>
-          <a href="/">Home</a>
-          <a href="#">Profil</a>
-          <a href="#">Cerita</a>
-          <a href="#">Keluar</a>
-        </div>
-
-        <button class="open-btn" onclick="openNav()">☰</button>
       </span>
-
-      <div id="serch">
-        <input type="text" placeholder="Cari Teman...." />
-        <!-- <img class="serch-right" alt="dasdddasda" /> -->
-      </div>
       <div class="teman"></div>
     </span>
-    <span id="right-countain">
-      <div class="awal">
-        <!-- <div class="photo"><img src="../phote/countai.jpg" alt="" /></div> -->
-        <h1>WhatsApp Web</h1>
-        <p>
-          kirim dan terima pesan tanpa perlu menghubungkan telepon Anda ke
-          Intenet <br />
-          Gunakan WhatsApp di maksimal 4 perangkat tertaut dan 1 telepon
-          sekaligun.
-        </p>
-      </div>
-    </span>
+    <span id="right-countain"> </span>
     <script>
-      function openNav() {
-        document.getElementById("my-sidepanel").style.width = "238px";
-      }
-
-      document.querySelector(".close-btn").addEventListener("click", () => {
-        document.getElementById("my-sidepanel").style.width = "0";
-      });
-
-      const searchInput = document.querySelector("#serch>input");
-      const list = document.querySelector(".teman");
-      console.log(searchInput);
       let pengguna;
 
       const kontak = document.querySelector("#right-countain");
@@ -282,8 +170,7 @@
 
           teman.appendChild(a);
         });
-
-        const buttons = document.querySelectorAll(".pesan-teman");
+        const buttons = document.querySelectorAll("a");
         buttons.forEach((e, i) => {
           e.onclick = async () => {
             awal.innerHTML = "";
@@ -291,24 +178,8 @@
             membuatBio(i);
             pesan(e);
           };
-        });
-        console.log(list);
-        searchInput.addEventListener("input", () => {
-          const inputValue = searchInput.value.toLowerCase();
-          const allConteck = list.querySelectorAll("a");
-          allConteck.forEach((e, i) => {
-            // Ambil teks dari elemen li
-            const listItemText = e.textContent.toLowerCase();
 
-            // Cek apakah teks elemen li mengandung nilai input
-            if (listItemText.indexOf(inputValue) !== -1) {
-              // Jika iya, tampilkan elemen li
-              e.style.display = "flex";
-            } else {
-              // Jika tidak, sembunyikan elemen li
-              e.style.display = "none";
-            }
-          });
+          e.addEventListener("dblclick", () => console.log("ok"));
         });
       }
       function membuatBio(index) {
