@@ -154,12 +154,12 @@ app.put("/api/baca/:id", async (req, res) => {
   res.sendStatus(200);
 });
 app.post("/api/story", type, async (req, res) => {
-  await client.query(`insert into story values(DEFAULT,${req.me.id},'${req.file.filename}','${req.body.caption}')`);
+  await client.query(`insert into story values(DEFAULT,${req.me.id},'','${req.body.caption}')`);
   res.sendStatus(200);
 });
-app.get("/api/story", async (_req, res) => {
-  await client.query(`select * from story')`);
-  res.sendStatus(200);
+app.get("/api/story/:id", async (req, res) => {
+  const results = await client.query(`select * from story where id_pengirim = ${req.params.id}`);
+  res.json(results.rows);
 });
 
 app.listen(3000, () => {

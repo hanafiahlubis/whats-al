@@ -5,7 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mi-ALi</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
     <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+      }
       * {
         padding: 0;
         margin: 0;
@@ -17,6 +24,51 @@
         background-color: #0c1022;
         display: flex;
         justify-content: space-between;
+      }
+
+      .sidepanel {
+        width: 0;
+        position: fixed;
+        z-index: 100;
+        height: 250px;
+        top: 0;
+        left: 0;
+        background-color: #0c1022;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+        overflow: hidden;
+      }
+
+      .sidepanel a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .sidepanel a:hover {
+        color: #ee00ff;
+      }
+
+      .sidepanel .close-btn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+      }
+
+      .open-btn {
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #0c1022;
+        padding: 10px 15px;
+        border: none;
+      }
+
+      .open-btn:hover {
+        background-color: #444;
       }
       #serch {
         display: flex;
@@ -37,6 +89,9 @@
       .header {
         padding: 8px;
         border-bottom: 1px solid #ee00ff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
       #right-countain {
         flex-grow: 1;
@@ -113,19 +168,67 @@
       .herder-kontak > img {
         margin: 0 3.2% 0 0;
       }
+      #serch {
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+        border-bottom: 1px solid #ee00ff;
+      }
+      #serch > input {
+        width: 16rem;
+        background-color: transparent;
+        outline: none;
+        border: none;
+
+        border-bottom: 1px solid;
+      }
+
+      ::placeholder {
+        color: #00ccff;
+        text-align: center;
+      }
+      #icon-tambah {
+        cursor: pointer;
+      }
+      #icon-tambah:hover {
+        color: #ee00ff;
+      }
+
+      .add-cerita {
+        background-color: rgb(59 115 110 / 22%);
+        display: none;
+        height: 100vh;
+        width: 100vh;
+        z-index: 5;
+      }
     </style>
   </head>
   <body>
-    <video controls>
+    <!-- <video controls>
       <source src="../profil/a.mp4" type="video/mp4" />
-    </video>
+    </video> -->
     <span id="left-countain">
       <span class="header">
         <img src="" alt="tidak masuk" />
+        <span class="material-symbols-outlined" id="icon-tambah">
+          add_circle
+        </span>
+        <div id="my-sidepanel" class="sidepanel">
+          <a href="javascript:void(0)" class="close-btn">×</a>
+          <a href="/">Home</a>
+          <a href="">Profil</a>
+          <a href="#">Cerita</a>
+          <a href="#">Keluar</a>
+        </div>
+        <button class="open-btn" onclick="openNav()">☰</button>
       </span>
+      <div id="serch">
+        <input type="text" placeholder="Cari Story...." />
+      </div>
       <div class="teman"></div>
     </span>
-    <span id="right-countain"> </span>
+    <span id="right-countain"> <div class="add-cerita"></div></span>
+
     <script>
       let pengguna;
 
@@ -139,10 +242,21 @@
           console.log(user);
           img.src = `/photos/${user.photo}`;
         });
+      function openNav() {
+        document.getElementById("my-sidepanel").style.width = "238px";
+      }
+
+      document.querySelector(".close-btn").addEventListener("click", () => {
+        document.getElementById("my-sidepanel").style.width = "0";
+      });
+
       const teman = document.querySelector(".teman");
       img.addEventListener("click", () => (location.href = "profil"));
       const dataTeman = [];
-
+      document.querySelector("#icon-tambah").addEventListener("click", () => {
+        const add = document.querySelector(".add-cerita");
+        add.style.display = "flext";
+      });
       async function tampilkanTeman() {
         const res = await fetch("/api/teman");
         const data = await res.json();
@@ -173,9 +287,9 @@
         const buttons = document.querySelectorAll("a");
         buttons.forEach((e, i) => {
           e.onclick = async () => {
-            awal.innerHTML = "";
+            // awal.innerHTML = "";
 
-            membuatBio(i);
+            // membuatStory(i);
             pesan(e);
           };
 
@@ -202,67 +316,69 @@
       }
 
       async function pesan(e) {
-        const res = await fetch(`/api/pesan/${e.value}`);
+        console.log(e.value);
+        const res = await fetch(`/api/story/${e.value}`);
         const data = await res.json();
-        const divUtama = document.createElement("div");
-        divUtama.className = "container-pesan";
-        data.forEach((e) => {
-          console.log("dsdsdsadaads");
-          const div = document.createElement("div");
-          const divPesan = document.createElement("div");
-          const h3 = document.createElement("h3");
+        console.log(data);
+        // const divUtama = document.createElement("div");
+        // divUtama.className = "container-pesan";
+        // data.forEach((e) => {
+        //   console.log("dsdsdsadaads");
+        //   const div = document.createElement("div");
+        //   const divPesan = document.createElement("div");
+        //   const h3 = document.createElement("h3");
 
-          h3.textContent = e.pesan;
+        //   h3.textContent = e.pesan;
 
-          divPesan.appendChild(h3);
-          div.appendChild(divPesan);
-          divUtama.appendChild(div);
+        //   divPesan.appendChild(h3);
+        //   div.appendChild(divPesan);
+        //   divUtama.appendChild(div);
 
-          if (e.id_pengirim === pengguna.id) {
-            console.log("masuk setelah mengirim");
-            div.className = "user";
-          } else {
-            div.className = "penerima";
-            if (!e.baca) {
-              fetch(`/api/baca/${e.id}`, { method: "PUT" });
-            }
-          }
-        });
-        kontak.appendChild(divUtama);
-        tompolKirim(e.value, divUtama);
-        divUtama.scrollTo(0, divUtama.scrollHeight);
-        setInterval(async () => {
-          const res = await fetch(`/api/pesan-baru/${e.value}`);
-          const data = await res.json();
-          console.log(data);
-          data.forEach((e, i) => {
-            console.log(i);
+        //   if (e.id_pengirim === pengguna.id) {
+        //     console.log("masuk setelah mengirim");
+        //     div.className = "user";
+        //   } else {
+        //     div.className = "penerima";
+        //     if (!e.baca) {
+        //       fetch(`/api/baca/${e.id}`, { method: "PUT" });
+        //     }
+        //   }
+        // });
+        // kontak.appendChild(divUtama);
+        // tompolKirim(e.value, divUtama);
+        // divUtama.scrollTo(0, divUtama.scrollHeight);
+        // setInterval(async () => {
+        //   const res = await fetch(`/api/story/${e.value}`);
+        //   const data = await res.json();
+        //   console.log(data);
+        //   // data.forEach((e, i) => {
+        //   console.log(i);
 
-            console.log("dsds");
-            const div = document.createElement("div");
-            const divPesan = document.createElement("div");
-            const h3 = document.createElement("h3");
+        //   console.log("dsds");
+        //   const div = document.createElement("div");
+        //   const divPesan = document.createElement("div");
+        //   const h3 = document.createElement("h3");
 
-            h3.textContent = e.pesan;
+        //   h3.textContent = e.pesan;
 
-            divPesan.appendChild(h3);
-            div.appendChild(divPesan);
-            divUtama.appendChild(div);
+        //   divPesan.appendChild(h3);
+        //   div.appendChild(divPesan);
+        //   divUtama.appendChild(div);
 
-            if (e.id_pengirim === pengguna.id) {
-              div.className = "user";
-              if (pengguna.id === e.id_penerima && !e.baca) {
-                fetch(`/api/baca/${e.id}`, { method: "PUT" });
-              }
-            } else {
-              div.className = "penerima";
-              if (!e.baca) {
-                fetch(`/api/baca/${e.id}`, { method: "PUT" });
-              }
-            }
-            divUtama.scrollTo(0, divUtama.scrollHeight);
-          });
-        }, 1000);
+        //   if (e.id_pengirim === pengguna.id) {
+        //     div.className = "user";
+        //     if (pengguna.id === e.id_penerima && !e.baca) {
+        //       fetch(`/api/baca/${e.id}`, { method: "PUT" });
+        //     }
+        //   } else {
+        //     div.className = "penerima";
+        //     if (!e.baca) {
+        //       fetch(`/api/baca/${e.id}`, { method: "PUT" });
+        //     }
+        //   }
+        //   divUtama.scrollTo(0, divUtama.scrollHeight);
+        // });
+        // }, 1000);
       }
 
       async function tompolKirim(id, divUtama) {
