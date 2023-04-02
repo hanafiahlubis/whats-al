@@ -9,6 +9,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
+    <link rel="shortcut icon" href="#" type="image/x-icon" />
     <style>
       .material-symbols-outlined {
         font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
@@ -52,7 +53,7 @@
         color: #ee00ff;
       }
 
-      .sidepanel .close-btn {
+      .sidepanel .close-btn-add {
         position: absolute;
         top: 0;
         right: 25px;
@@ -104,20 +105,14 @@
       #right-countain > form > input {
         flex-grow: 1;
       }
-      .photo {
-        width: 70px;
-      }
-      .photo > img {
-        width: 70px;
-        height: 80px;
-      }
-      .pesan-teman {
+
+      .cerita-orang {
         display: flex;
         cursor: pointer;
         align-items: center;
         border-bottom: 1px solid #ee00ff;
       }
-      .pesan-teman > div {
+      .cerita-orang > div {
         padding: 10px;
       }
       .penerima {
@@ -179,13 +174,7 @@
         background-color: transparent;
         outline: none;
         border: none;
-
         border-bottom: 1px solid;
-      }
-
-      ::placeholder {
-        color: #00ccff;
-        text-align: center;
       }
       #icon-tambah {
         cursor: pointer;
@@ -194,19 +183,211 @@
         color: #ee00ff;
       }
 
-      .add-cerita {
+      .container-cerita {
         background-color: rgb(59 115 110 / 22%);
         display: none;
         height: 100vh;
-        width: 100vh;
+        width: 100%;
         z-index: 5;
+        align-items: center;
+        justify-content: center;
+      }
+      .add-cerita {
+        position: relative;
+        width: 400px;
+        height: 470px;
+        max-width: 400px;
+        max-height: 470px;
+        background: #040717;
+        /* border-radius: 50px 5px; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-top: 70px;
+      }
+      .add-cerita::before {
+        position: absolute;
+        width: 170%;
+        height: 170%;
+        content: "";
+        background-image: conic-gradient(
+          transparent,
+          transparent,
+          transparent,
+          #ee00ff
+        );
+        animation: rotate_border 6s linear infinite;
+      }
+      .add-cerita::after {
+        position: absolute;
+        width: 170%;
+        height: 170%;
+        content: "";
+        background-image: conic-gradient(
+          transparent,
+          transparent,
+          transparent,
+          #00ccff
+        );
+        animation: rotate_border 6s linear infinite;
+        animation-delay: -3s;
+      }
+      @keyframes rotate_border {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .add-form {
+        position: absolute;
+        content: "";
+        background-color: #0c1022;
+        border-radius: 50px 5px;
+        inset: 5px;
+        padding: 50px 40px;
+        z-index: 10;
+        color: #00ccff;
+      }
+      h2 {
+        font-size: 40px;
+        font-weight: 600;
+        text-align: center;
+      }
+      .input-group {
+        margin-top: 40px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+      }
+      .input-text {
+        width: 95%;
+        height: 30px;
+        background: transparent;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #00ccff;
+        font-size: 20px;
+        padding-left: 10px;
+        color: #00ccff;
+      }
+      ::placeholder {
+        font-size: 15px;
+        color: #00ccff;
+        letter-spacing: 1px;
+        text-align: center;
+      }
+      .fa {
+        font-size: 20px;
+      }
+      button {
+        background-color: transparent;
+        cursor: pointer;
+        font-size: 25px;
+      }
+      button:hover {
+        color: #ee00ff;
+      }
+      #post-button {
+        position: relative;
+        width: 300px;
+        height: 40px;
+        transition: 1s;
+        margin-top: 70px;
+      }
+      #post-button button {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+        z-index: 10;
+        cursor: pointer;
+        font-size: 22px;
+        letter-spacing: 2px;
+        border: 1px solid #00ccff;
+        border-radius: 50px;
+        background-color: #0c1022;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #00ccff;
+      }
+      .story-text {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 5px;
+        font-size: 12px;
+        z-index: 1;
+      }
+      .story {
+        position: relative;
+        display: inline-block;
+      }
+      .div-img {
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      .div-img > img {
+        width: 26%;
+        height: auto;
+        object-fit: cover;
+      }
+      .caption-img {
+        position: absolute;
+        top: 86%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+      }
+      .div-video {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .div-video > video {
+        height: 90vh;
+        width: 320px;
+      }
+      .div-video > span {
+        position: absolute;
+        top: 84%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 16px;
+        border-radius: 5px;
+      }
+      .tampil-cerita {
+        display: grid;
+        order: 2;
+        gap: 2rem;
+        overflow-y: auto;
       }
     </style>
   </head>
   <body>
-    <!-- <video controls>
-      <source src="../profil/a.mp4" type="video/mp4" />
-    </video> -->
+    <!-- <div>
+      <video
+        src="/photos/5aa41e2eabb944f6cc1a367194a69a21"
+        controls
+        class="story"
+      ></video>
+    </div> -->
+
     <span id="left-countain">
       <span class="header">
         <img src="" alt="tidak masuk" />
@@ -214,7 +395,7 @@
           add_circle
         </span>
         <div id="my-sidepanel" class="sidepanel">
-          <a href="javascript:void(0)" class="close-btn">×</a>
+          <a href="javascript:void(0)" class="close-btn-add">×</a>
           <a href="/">Home</a>
           <a href="">Profil</a>
           <a href="#">Cerita</a>
@@ -227,11 +408,49 @@
       </div>
       <div class="teman"></div>
     </span>
-    <span id="right-countain"> <div class="add-cerita"></div></span>
+    <span id="right-countain">
+      <div class="container-cerita">
+        <div class="add-cerita">
+          <div class="add-form">
+            <button href="javascript:void(0)" class="close-btn">×</button>
+            <h2>Add Storie</h2>
+            <form action="" name="kirim">
+              <div class="input-group">
+                <i class="fa fa-user"></i>
+                <input
+                  type="file"
+                  class="input-text"
+                  autocomplete="off"
+                  required
+                  name="file"
+                />
+              </div>
+              <div class="input-group">
+                <i class="fa"></i>
+
+                <input
+                  type="text"
+                  placeholder="Caption"
+                  class="input-text"
+                  name="caption"
+                  required
+                  autocomplete="off"
+                />
+              </div>
+              <div class="button-group" id="post-button">
+                <button>Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="tampil-cerita"></div>
+    </span>
 
     <script>
       let pengguna;
 
+      const add = document.querySelector(".container-cerita");
       const kontak = document.querySelector("#right-countain");
       const awal = document.querySelector(".awal");
       const img = document.querySelector(".header>img");
@@ -245,18 +464,30 @@
       function openNav() {
         document.getElementById("my-sidepanel").style.width = "238px";
       }
-
-      document.querySelector(".close-btn").addEventListener("click", () => {
+      // untuk menutup menu
+      document.querySelector(".close-btn-add").addEventListener("click", () => {
         document.getElementById("my-sidepanel").style.width = "0";
       });
-
-      const teman = document.querySelector(".teman");
-      img.addEventListener("click", () => (location.href = "profil"));
-      const dataTeman = [];
-      document.querySelector("#icon-tambah").addEventListener("click", () => {
-        const add = document.querySelector(".add-cerita");
-        add.style.display = "flext";
+      // untuk menutup post cerita
+      document.querySelector(".close-btn").addEventListener("click", () => {
+        add.style.display = "none";
+        document.querySelector("#icon-tambah").style.display = "inline";
       });
+      const teman = document.querySelector(".teman");
+
+      let dataTeman = [];
+      // untuk membuka profil
+      img.addEventListener("click", () => (location.href = "profil"));
+
+      document.querySelector("#icon-tambah").addEventListener("click", () => {
+        document.querySelector("#icon-tambah").style.display = "none";
+        if (document.querySelectorAll(".herder-kontak").length > 0) {
+          document.querySelector(".herder-kontak").style.display = "none";
+          document.querySelector(".tampil-cerita").style.display = "none";
+        }
+        add.style.display = "flex";
+      });
+
       async function tampilkanTeman() {
         const res = await fetch("/api/teman");
         const data = await res.json();
@@ -274,30 +505,54 @@
 
           const div = document.createElement("div");
           const h3 = document.createElement("h3");
-          // a.textContent = e.nama_lengkap;
           h3.textContent = e.nama_lengkap;
           div.appendChild(h3);
           a.appendChild(divImg);
           a.appendChild(div);
           a.value = e.id;
-          a.className = `pesan-teman`;
+          a.className = `cerita-orang`;
 
           teman.appendChild(a);
         });
-        const buttons = document.querySelectorAll("a");
+        const buttons = document.querySelectorAll(".cerita-orang");
         buttons.forEach((e, i) => {
           e.onclick = async () => {
             // awal.innerHTML = "";
-
-            // membuatStory(i);
-            pesan(e);
+            if (
+              document.getElementsByName("tampilan-cerita") &&
+              document.querySelectorall(".herder-kontak").length > 0
+            ) {
+              document.querySelector(".tampilan-cerita").innerHTML = "";
+              document.querySelector(".herder-kontak").innerHTML = "";
+            }
+            membuatBio(i);
+            cerita(e);
           };
 
           e.addEventListener("dblclick", () => console.log("ok"));
         });
       }
+
+      //tambah cerita
+      document.kirim.onsubmit = async (e) => {
+        e.preventDefault();
+        const data = new FormData();
+        data.append("file", document.kirim.file.files[0]);
+        data.append("caption", document.kirim.caption.value);
+        await fetch("/api/story", {
+          method: "POST",
+          body: data,
+        });
+
+        document.kirim.file.value = "";
+        document.kirim.caption.value = "";
+        add.style.display = "none";
+        document.querySelector(".container-cerita").style.display = "none";
+        document.querySelector("#icon-tambah").style.display = "flex";
+      };
+
       function membuatBio(index) {
-        kontak.innerHTML = "";
+        // kontak.innerHTML = "";
 
         const div = document.createElement("div");
         const div2 = document.createElement("div");
@@ -315,70 +570,51 @@
         kontak.appendChild(div);
       }
 
-      async function pesan(e) {
-        console.log(e.value);
+      async function cerita(e) {
+        const div = document.querySelector(".tampil-cerita");
         const res = await fetch(`/api/story/${e.value}`);
         const data = await res.json();
-        console.log(data);
-        // const divUtama = document.createElement("div");
-        // divUtama.className = "container-pesan";
-        // data.forEach((e) => {
-        //   console.log("dsdsdsadaads");
-        //   const div = document.createElement("div");
-        //   const divPesan = document.createElement("div");
-        //   const h3 = document.createElement("h3");
+        data.forEach((e) => {
+          file = e.media.split(".");
 
-        //   h3.textContent = e.pesan;
+          const divMedia = document.createElement("div");
+          if (file[1] === "img") {
+            const img = document.createElement("img");
+            const caption = document.createElement("span"); //belum
 
-        //   divPesan.appendChild(h3);
-        //   div.appendChild(divPesan);
-        //   divUtama.appendChild(div);
+            img.src = `/photos/${file[0]}`;
+            caption.textContent = e.caption;
+            caption.className = "caption-img";
+            divMedia.className = "div-img";
 
-        //   if (e.id_pengirim === pengguna.id) {
-        //     console.log("masuk setelah mengirim");
-        //     div.className = "user";
-        //   } else {
-        //     div.className = "penerima";
-        //     if (!e.baca) {
-        //       fetch(`/api/baca/${e.id}`, { method: "PUT" });
-        //     }
-        //   }
-        // });
-        // kontak.appendChild(divUtama);
-        // tompolKirim(e.value, divUtama);
-        // divUtama.scrollTo(0, divUtama.scrollHeight);
-        // setInterval(async () => {
-        //   const res = await fetch(`/api/story/${e.value}`);
-        //   const data = await res.json();
-        //   console.log(data);
-        //   // data.forEach((e, i) => {
-        //   console.log(i);
+            divMedia.appendChild(img);
+            divMedia.appendChild(caption);
+            div.appendChild(divMedia);
+          } else {
+            const vidio = document.createElement("video");
+            const caption = document.createElement("span");
+            vidio.controls = true;
+            vidio.autoplay = true;
+            vidio.loop = true;
 
-        //   console.log("dsds");
-        //   const div = document.createElement("div");
-        //   const divPesan = document.createElement("div");
-        //   const h3 = document.createElement("h3");
+            vidio.src = `/photos/${file[0]}`;
+            const source = document.createElement("source");
+            source.type = "vidio/webm";
+            source.src = `/photos/${file[0]}`;
 
-        //   h3.textContent = e.pesan;
+            const source2 = document.createElement("source");
+            source2.type = "vidio/mp4";
+            source2.src = `/photos/${file[0]}`;
+            caption.textContent = e.caption;
+            divMedia.className = "div-video";
 
-        //   divPesan.appendChild(h3);
-        //   div.appendChild(divPesan);
-        //   divUtama.appendChild(div);
-
-        //   if (e.id_pengirim === pengguna.id) {
-        //     div.className = "user";
-        //     if (pengguna.id === e.id_penerima && !e.baca) {
-        //       fetch(`/api/baca/${e.id}`, { method: "PUT" });
-        //     }
-        //   } else {
-        //     div.className = "penerima";
-        //     if (!e.baca) {
-        //       fetch(`/api/baca/${e.id}`, { method: "PUT" });
-        //     }
-        //   }
-        //   divUtama.scrollTo(0, divUtama.scrollHeight);
-        // });
-        // }, 1000);
+            vidio.appendChild(source);
+            vidio.appendChild(source2);
+            divMedia.appendChild(vidio);
+            divMedia.appendChild(caption);
+            div.appendChild(divMedia);
+          }
+        });
       }
 
       async function tompolKirim(id, divUtama) {

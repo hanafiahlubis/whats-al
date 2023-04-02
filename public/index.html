@@ -297,15 +297,11 @@
           const inputValue = searchInput.value.toLowerCase();
           const allConteck = list.querySelectorAll("a");
           allConteck.forEach((e, i) => {
-            // Ambil teks dari elemen li
             const listItemText = e.textContent.toLowerCase();
 
-            // Cek apakah teks elemen li mengandung nilai input
             if (listItemText.indexOf(inputValue) !== -1) {
-              // Jika iya, tampilkan elemen li
               e.style.display = "flex";
             } else {
-              // Jika tidak, sembunyikan elemen li
               e.style.display = "none";
             }
           });
@@ -336,7 +332,6 @@
         const divUtama = document.createElement("div");
         divUtama.className = "container-pesan";
         data.forEach((e) => {
-          console.log("dsdsdsadaads");
           const div = document.createElement("div");
           const divPesan = document.createElement("div");
           const h3 = document.createElement("h3");
@@ -365,9 +360,6 @@
           const data = await res.json();
           console.log(data);
           data.forEach((e, i) => {
-            console.log(i);
-
-            console.log("dsds");
             const div = document.createElement("div");
             const divPesan = document.createElement("div");
             const h3 = document.createElement("h3");

@@ -154,11 +154,30 @@ app.put("/api/baca/:id", async (req, res) => {
   res.sendStatus(200);
 });
 app.post("/api/story", type, async (req, res) => {
-  await client.query(`insert into story values(DEFAULT,${req.me.id},'','${req.body.caption}')`);
-  res.sendStatus(200);
+  if (req.file.mimetype.startsWith('image/')) {
+    // Jika file gambar
+    await client.query(`insert into story values(DEFAULT,${req.me.id},'${req.file.filename}.img','${req.body.caption}')`);
+    // 
+    console.log('Ini adalah file gambar');
+  } else if (req.file.mimetype.startsWith('video/')) {
+    // Jika file video   
+    await client.query(`insert into story values(DEFAULT,${req.me.id},'${req.file.filename}.mp4','${req.body.caption}')`);
+
+
+    console.log('Ini adalah file video');
+  } else {
+    // Jika bukan file gambar atau video
+    console.log('Ini adalah file yang tidak didukung');
+  }
+  // }
+  //  res.sendStatus(200);
 });
+
+// app.use('/vidios', express.static(path.join(__dirname, 'public/photos')));
 app.get("/api/story/:id", async (req, res) => {
   const results = await client.query(`select * from story where id_pengirim = ${req.params.id}`);
+  console.log(results.rows[0].media.split(".")[1]);
+  console.log(212);
   res.json(results.rows);
 });
 
