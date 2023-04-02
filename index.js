@@ -176,8 +176,7 @@ app.post("/api/story", type, async (req, res) => {
 // app.use('/vidios', express.static(path.join(__dirname, 'public/photos')));
 app.get("/api/story/:id", async (req, res) => {
   const results = await client.query(`select * from story where id_pengirim = ${req.params.id}`);
-  console.log(results.rows[0].media.split(".")[1]);
-  console.log(212);
+
   res.json(results.rows);
 });
 

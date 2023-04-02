@@ -377,6 +377,9 @@
         gap: 2rem;
         overflow-y: auto;
       }
+      .container2 {
+        display: grid;
+      }
     </style>
   </head>
   <body>
@@ -444,7 +447,9 @@
           </div>
         </div>
       </div>
-      <div class="tampil-cerita"></div>
+      <div class="container2">
+        <div class="tampil-cerita"></div>
+      </div>
     </span>
 
     <script>
@@ -454,6 +459,7 @@
       const kontak = document.querySelector("#right-countain");
       const awal = document.querySelector(".awal");
       const img = document.querySelector(".header>img");
+      const container = document.querySelector(".container2");
       fetch("/api/me")
         .then((res) => res.json())
         .then((user) => {
@@ -516,15 +522,21 @@
         });
         const buttons = document.querySelectorAll(".cerita-orang");
         buttons.forEach((e, i) => {
+          console.log(e);
           e.onclick = async () => {
+            container.innerHTML = "";
+            const div = document.createElement("div");
+            div.className = "tampil-cerita";
+            container.appendChild(div);
             // awal.innerHTML = "";
-            if (
-              document.getElementsByName("tampilan-cerita") &&
-              document.querySelectorall(".herder-kontak").length > 0
-            ) {
-              document.querySelector(".tampilan-cerita").innerHTML = "";
-              document.querySelector(".herder-kontak").innerHTML = "";
-            }
+            // if (
+            //   document.getElementsByName("tampilan-cerita") &&
+            //   document.getElementsByClassName("herder-kontak").length > 0
+            // ) {
+            //   const tampilan = document.querySelector(".tampilan-cerita");
+            //   tampilan.innerHTML = "";
+            //   document.querySelector(".herder-kontak").innerHTML = "";
+            // }
             membuatBio(i);
             cerita(e);
           };
@@ -553,7 +565,7 @@
 
       function membuatBio(index) {
         // kontak.innerHTML = "";
-
+        // container.innerHTML = "";
         const div = document.createElement("div");
         const div2 = document.createElement("div");
         const h2 = document.createElement("h2");
@@ -567,11 +579,13 @@
         div.appendChild(div2);
 
         div.className = "herder-kontak";
-        kontak.appendChild(div);
+        container.appendChild(div);
+        // kontak.appendChild(div);
       }
 
       async function cerita(e) {
         const div = document.querySelector(".tampil-cerita");
+        const div2 = document.createElement("div");
         const res = await fetch(`/api/story/${e.value}`);
         const data = await res.json();
         data.forEach((e) => {
@@ -590,7 +604,7 @@
             divMedia.appendChild(img);
             divMedia.appendChild(caption);
             div.appendChild(divMedia);
-          } else {
+          } else if (file[1] === "mp4") {
             const vidio = document.createElement("video");
             const caption = document.createElement("span");
             vidio.controls = true;
@@ -613,6 +627,8 @@
             divMedia.appendChild(vidio);
             divMedia.appendChild(caption);
             div.appendChild(divMedia);
+          } else {
+            alert("ok");
           }
         });
       }
