@@ -9,6 +9,10 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+    />
     <link rel="shortcut icon" href="#" type="image/x-icon" />
     <style>
       .material-symbols-outlined {
@@ -334,12 +338,14 @@
         position: relative;
         align-items: center;
         justify-content: center;
-        height: 100vh;
+        height: 591px;
+        gap: 2rem;
       }
       .div-img > img {
-        width: 26%;
         height: auto;
+        width: 320px;
         object-fit: cover;
+        border-radius: 0;
       }
       .caption-img {
         position: absolute;
@@ -361,7 +367,7 @@
         height: 90vh;
         width: 320px;
       }
-      .div-video > span {
+      .div-video > p {
         position: absolute;
         top: 84%;
         left: 50%;
@@ -374,11 +380,14 @@
       .tampil-cerita {
         display: grid;
         order: 2;
-        gap: 2rem;
         overflow-y: auto;
+        height: 90vh;
       }
       .container2 {
         display: grid;
+      }
+      .box {
+        box-sizing: border-box;
       }
     </style>
   </head>
@@ -464,7 +473,6 @@
         .then((res) => res.json())
         .then((user) => {
           pengguna = user;
-          console.log(user);
           img.src = `/photos/${user.photo}`;
         });
       function openNav() {
@@ -478,6 +486,8 @@
       document.querySelector(".close-btn").addEventListener("click", () => {
         add.style.display = "none";
         document.querySelector("#icon-tambah").style.display = "inline";
+
+        container.style.display = "grid";
       });
       const teman = document.querySelector(".teman");
 
@@ -491,6 +501,7 @@
           document.querySelector(".herder-kontak").style.display = "none";
           document.querySelector(".tampil-cerita").style.display = "none";
         }
+        container.style.display = "none";
         add.style.display = "flex";
       });
 
@@ -528,15 +539,9 @@
             const div = document.createElement("div");
             div.className = "tampil-cerita";
             container.appendChild(div);
-            // awal.innerHTML = "";
-            // if (
-            //   document.getElementsByName("tampilan-cerita") &&
-            //   document.getElementsByClassName("herder-kontak").length > 0
-            // ) {
-            //   const tampilan = document.querySelector(".tampilan-cerita");
-            //   tampilan.innerHTML = "";
-            //   document.querySelector(".herder-kontak").innerHTML = "";
-            // }
+            add.style.display = "none";
+            container.style.display = "grid";
+            document.querySelector("#icon-tambah").style.display = "flex";
             membuatBio(i);
             cerita(e);
           };
@@ -564,8 +569,6 @@
       };
 
       function membuatBio(index) {
-        // kontak.innerHTML = "";
-        // container.innerHTML = "";
         const div = document.createElement("div");
         const div2 = document.createElement("div");
         const h2 = document.createElement("h2");
@@ -580,10 +583,10 @@
 
         div.className = "herder-kontak";
         container.appendChild(div);
-        // kontak.appendChild(div);
       }
 
       async function cerita(e) {
+        console.log(e);
         const div = document.querySelector(".tampil-cerita");
         const div2 = document.createElement("div");
         const res = await fetch(`/api/story/${e.value}`);
@@ -594,19 +597,22 @@
           const divMedia = document.createElement("div");
           if (file[1] === "img") {
             const img = document.createElement("img");
-            const caption = document.createElement("span"); //belum
+            const caption = document.createElement("p"); //belum
 
             img.src = `/photos/${file[0]}`;
             caption.textContent = e.caption;
             caption.className = "caption-img";
-            divMedia.className = "div-img";
+            divMedia.className = "div-img box";
+
+            if (pengguna.id === e) {
+            }
 
             divMedia.appendChild(img);
             divMedia.appendChild(caption);
             div.appendChild(divMedia);
           } else if (file[1] === "mp4") {
             const vidio = document.createElement("video");
-            const caption = document.createElement("span");
+            const caption = document.createElement("p");
             vidio.controls = true;
             vidio.autoplay = true;
             vidio.loop = true;
@@ -620,7 +626,7 @@
             source2.type = "vidio/mp4";
             source2.src = `/photos/${file[0]}`;
             caption.textContent = e.caption;
-            divMedia.className = "div-video";
+            divMedia.className = "div-video box";
 
             vidio.appendChild(source);
             vidio.appendChild(source2);
