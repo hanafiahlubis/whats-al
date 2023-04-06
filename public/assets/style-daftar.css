@@ -14,12 +14,12 @@ body {
     background-color: #0c1022;
 }
 
-.login-form-container {
+.daftar-form-container {
     position: relative;
     width: 400px;
-    height: 470px;
+    height: 36rem;
     max-width: 400px;
-    max-height: 470px;
+    max-height: 100vh;
     background: #040717;
     border-radius: 50px 5px;
     display: flex;
@@ -28,7 +28,7 @@ body {
     overflow: hidden;
 }
 
-.login-form-container::before {
+.daftar-form-container::before {
     position: absolute;
     width: 170%;
     height: 170%;
@@ -40,11 +40,11 @@ body {
     animation: rotate_border 6s linear infinite;
 }
 
-.login-form-container::after {
+.daftar-form-container::after {
     position: absolute;
     width: 170%;
     height: 170%;
-    content: "aa";
+    content: "";
     background-image: conic-gradient(transparent,
             transparent,
             transparent,
@@ -63,7 +63,7 @@ body {
     }
 }
 
-.login-form {
+.daftar-form {
     position: absolute;
     content: "";
     background-color: #0c1022;
@@ -110,15 +110,15 @@ h2 {
     font-size: 20px;
 }
 
-#login-button {
+#daftar-button {
     position: relative;
     width: 300px;
     height: 40px;
     transition: 1s;
-    margin-top: 70px;
+    margin-top: 46px;
 }
 
-#login-button button {
+#daftar-button button {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -148,59 +148,27 @@ h2 {
     font-size: 18px;
 }
 
-@media(max-width :450px) {
-    .login-form-container {
-        max-width: 400px;
-        max-height: 400px;
-    }
+.glowIcon {
+    text-shadow: 0 0 10px #00ccff;
+}
 
-    .login-form>form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+@media(max-width:480px) {
+    .daftar-form-container {
+        width: 325px;
+        max-width: 325px;
+        height: 28rem;
     }
 
     h2 {
-        font-size: 33px;
+        font-size: 20px;
     }
 
     .input-text {
-        width: 95%;
-    }
-
-    #login-button {
-        margin-top: 46px;
-        width: 170px;
-    }
-
-    #login-button button {
-        font-size: 17px;
-    }
-
-    .fotter {
-        gap: 4rem;
-    }
-
-    .b .fotter>a {
-        font-size: 16px;
-    }
-}
-
-@media(max-width:410px) {
-    .login-form-container {
-        max-width: 320px;
-    }
-
-    ::placeholder {
         font-size: 12px;
     }
 
-    h2 {
-        font-size: 24px;
-    }
-
     .input-group {
-        display: flex;
+        margin-top: 28px;
         justify-content: center;
     }
 
@@ -208,38 +176,39 @@ h2 {
         display: none;
     }
 
-    #login-button {
+    #daftar-button {
+        margin-top: 28px;
         display: flex;
         justify-content: center;
+        width: 100%;
     }
 
-    #login-button button {
+    #daftar-button button {
         width: 70%;
-        font-size: 14px;
-        height: 78%;
+        height: 27px;
+        font-size: 16px;
+    }
+
+    ::placeholder {
+        font-size: 12px;
     }
 
     .fotter a {
-        font-size: 11px;
+        font-size: 12px;
     }
+
 }
 
-@media(max-width:325px) {
-    .login-form-container {
-        max-width: 272px;
-        max-height: 373px;
+@media(max-width:316px) {
+    .input-text {
+        transition: 2s;
+        font-size: 8px;
     }
 
-    #login-button {
-        margin-top: 22px;
-    }
-
-    .fotter {
-        gap: 1.3rem;
+    .daftar-form-container {
+        width: 271px;
+        max-width: 254px;
     }
 
 
-    .fotter a {
-        font-size: 13px;
-    }
 }

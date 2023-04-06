@@ -1,31 +1,18 @@
 import dotenv from "dotenv";
 dotenv.config();
-
 import express from "express";
 import { client } from "./db.js";
-
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcryptjs";
 import multer from "multer";
-const upload = multer({ dest: "public/photos" });
+const upload = multer({ dest: "public/photos", });
 
 const type = upload.single('file')
 const app = express();
 
-// middleware untuk membaca body berformat JSON
 app.use(express.json());
-// middleware untuk mengelola cookie
 
-// Untuk mengakses file statis (khusus Vercel)
-
-app.use(express.static("public"));
-
-import path from "path";
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
-app.use(express.static(path.resolve(__dirname, "public")));
-
-// tambah akun
 app.post("/api/akun", type, async (req, res) => {
   const result = await client.query("select username from akun");
   let ada = false;
@@ -48,7 +35,6 @@ app.put("/api/edit-password/akun", async (req, res) => {
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(req.body.password, salt);
     await client.query(`update akun set password = '${hash}'where username = '${req.body.username}'`);
-
     res.status(200);
     res.send("Berhasil Di edit");
   } else {
@@ -58,9 +44,8 @@ app.put("/api/edit-password/akun", async (req, res) => {
   }
 });
 app.use(cookieParser());
-
 app.use((req, res, next) => {
-  if (req.path.startsWith("/api/login") || req.path.startsWith("/assets")) {
+  if (req.path === "/api/login" || req.path.startsWith("/assets")) {
     next();
   } else {
     let authorized = false;
@@ -94,12 +79,15 @@ app.use((req, res, next) => {
   }
 });
 
+// Untuk mengakses file statis (khusus Vercel)
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "public")));
 
 
-// Untuk mengakses file statis
-// app.use(express.static("public"));
 
-// Untuk membaca body berformat JSON
 app.post("/api/login", async (req, res) => {
   const results = await client.query(
     `SELECT * FROM akun WHERE username = '${req.body.username}'`
@@ -125,24 +113,42 @@ app.get("/api/me", async (req, res) => {
   req.me = result.rows[0];
   res.json(req.me);
 });
+
+app.get("/api/logout", (_req, res) => {
+  res.setHeader("Cache-Control", "no-store"); // khusus Vercel
+  res.clearCookie("token");
+  res.send("Logout berhasil.");
+});
+
 app.get("/api/teman", async (_req, res) => {
   const results = await client.query("select * from akun order by id asc ");
   res.send(results.rows);
 });
-app.put("/api/bio", async (req, res) => {
-  await client.query(`UPDATE akun set nama_lengkap = '${req.body.nama}',username = '${req.body.username}'  where id = ${req.me.id}`);
-  res.send("ok");
+//Set Request Size Limit
+// app.use(express.limit(100000000));
+
+app.put("/api/bio", type, async (req, res) => {
+  // console.log(req.hasOwnProperty('file'));
+  if (req.hasOwnProperty('file'))
+    await client.query(`UPDATE akun set nama_lengkap = '${req.body.nama}',username = '${req.body.username}' , photo  = '${req.file.filename}' where id = ${req.me.id}`);
+  else
+    await client.query(`UPDATE akun set nama_lengkap = '${req.body.nama}',username = '${req.body.username}' where id = ${req.me.id}`);
+  res.send("Berhasil Di ubah");
+  res.status(200);
 });
+
 app.get("/api/pesan/:id", async (req, res) => {
   const idPenerima = parseInt(req.params.id);
   const data = await client.query(`select * from pesan where id_pengirim = ${req.me.id} AND id_penerima = ${idPenerima} or id_pengirim = ${idPenerima} AND id_penerima = ${req.me.id} order by tanggal_waktu asc`)
   res.json(data.rows);
 });
+
 app.get("/api/pesan-baru/:id", async (req, res) => {
   const idPengirim = parseInt(req.params.id);
   const data = await client.query(`select * from pesan where id_pengirim = ${idPengirim} AND id_penerima = ${req.me.id} and baca = false order by tanggal_waktu asc`)
   res.json(data.rows);
 });
+
 app.post("/api/tambah/pesan/:id", async (req, res) => {
   const idPenerima = parseInt(req.params.id);
   await client.query(`insert into pesan values(default,${req.me.id},${idPenerima},now(), '${req.body.pesan}','false')`)
@@ -153,31 +159,34 @@ app.put("/api/baca/:id", async (req, res) => {
   await client.query(`update pesan set baca = true where id = ${req.params.id}`);
   res.sendStatus(200);
 });
+
 app.post("/api/story", type, async (req, res) => {
   if (req.file.mimetype.startsWith('image/')) {
-    // Jika file gambar
     await client.query(`insert into story values(DEFAULT,${req.me.id},'${req.file.filename}.img','${req.body.caption}')`);
-    // 
-    console.log('Ini adalah file gambar');
+    res.sendStatus(200);
   } else if (req.file.mimetype.startsWith('video/')) {
-    // Jika file video   
     await client.query(`insert into story values(DEFAULT,${req.me.id},'${req.file.filename}.mp4','${req.body.caption}')`);
-
-
-    console.log('Ini adalah file video');
+    res.sendStatus(200);
   } else {
-    // Jika bukan file gambar atau video
-    console.log('Ini adalah file yang tidak didukung');
+    res.sendStatus(401);
   }
-  // }
-  //  res.sendStatus(200);
+});
+app.get("/api/story/:id", async (req, res) => {
+  const results = await client.query(`select * from story where id_pengirim = ${req.params.id} order by id desc`);
+  res.json(results.rows);
 });
 
-// app.use('/vidios', express.static(path.join(__dirname, 'public/photos')));
-app.get("/api/story/:id", async (req, res) => {
-  const results = await client.query(`select * from story where id_pengirim = ${req.params.id}`);
+app.get("/api/pesan-sekarang/:id", async (req, res) => {
+  const idPenerima = parseInt(req.params.id);
+  const results = await client.query(`select * from pesan where id_pengirim = ${req.me.id} AND id_penerima = ${idPenerima} order by tanggal_waktu asc`);
+  let a;
+  results.rows.forEach((_pesan, i) => a = i);
+  res.json(results.rows[a]);
+});
 
-  res.json(results.rows);
+app.delete("/api/pesan/:id", async (req, res) => {
+  await client.query(`delete from pesan where id = ${req.params.id}`);
+  res.sendStatus(200);
 });
 
 app.listen(3000, () => {

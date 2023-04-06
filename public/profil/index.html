@@ -5,169 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      h2 {
-        font-size: 40px;
-        font-weight: 600;
-        text-align: center;
-      }
-      .header {
-        display: flex;
-        text-align: center;
-        justify-content: center;
-      }
-      body {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        letter-spacing: 1px;
-        background-color: #0c1022;
-      }
-      .container {
-        position: relative;
-        width: 400px;
-        height: 487px;
-        max-width: 400px;
-        max-height: 487px;
-        background: #040717;
-        border-radius: 50px 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        margin-top: 70px;
-      }
-      .container::before {
-        position: absolute;
-        width: 170%;
-        height: 170%;
-        content: "";
-        background-image: conic-gradient(
-          transparent,
-          transparent,
-          transparent,
-          #ee00ff
-        );
-        animation: rotate_border 6s linear infinite;
-      }
-      .container::after {
-        position: absolute;
-        width: 170%;
-        height: 170%;
-        content: "";
-        background-image: conic-gradient(
-          transparent,
-          transparent,
-          transparent,
-          #00ccff
-        );
-        animation: rotate_border 6s linear infinite;
-        animation-delay: -3s;
-      }
-      @keyframes rotate_border {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-      .profil {
-        position: absolute;
-        content: "";
-        background-color: #0c1022;
-        border-radius: 50px 5px;
-        inset: 5px;
-        padding: 50px 40px;
-        z-index: 10;
-        color: #00ccff;
-      }
-
-      ::placeholder {
-        font-size: 15px;
-        color: #00ccff52;
-        letter-spacing: 1px;
-      }
-      #login-button {
-        position: relative;
-        width: 300px;
-        height: 40px;
-        transition: 1s;
-        margin-top: 70px;
-      }
-      #login-button button {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        text-decoration: none;
-        z-index: 10;
-        cursor: pointer;
-        font-size: 22px;
-        letter-spacing: 2px;
-        border: 1px solid #00ccff;
-        border-radius: 50px;
-        background-color: #0c1022;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #00ccff;
-      }
-      img {
-        height: 80px;
-        width: 80px;
-        object-fit: cover;
-        border-radius: 100%;
-      }
-      .input-group {
-        margin-top: 40px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: start;
-      }
-      .input-text {
-        width: 95%;
-        height: 30px;
-        background: transparent;
-        border: none;
-        outline: none;
-        border-bottom: 1px solid #00ccff;
-        font-size: 20px;
-        padding-left: 10px;
-        color: #00ccff;
-      }
-      #login-button {
-        position: relative;
-        width: 300px;
-        height: 40px;
-        transition: 1s;
-        margin-top: 70px;
-      }
-      #login-button button {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        text-decoration: none;
-        z-index: 10;
-        cursor: pointer;
-        font-size: 22px;
-        letter-spacing: 2px;
-        border: 1px solid #00ccff;
-        border-radius: 50px;
-        background-color: #0c1022;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #00ccff;
-      }
-    </style>
+    <link rel="stylesheet" href="../assets/style-profil.css" />
   </head>
   <body>
     <div class="container">
@@ -204,47 +42,25 @@
               />
             </label>
           </div>
-          <div class="button-group" id="login-button">
+          <div class="input-group">
+            <label for="">
+              Ganti Profil
+              <input
+                type="file"
+                placeholder="Username"
+                class="input-text"
+                name="file"
+                autocomplete="off"
+              />
+            </label>
+          </div>
+          <div class="button-group" id="profil-button">
             <button>Submit</button>
+            <button onclick="pindah()">Back</button>
           </div>
         </form>
       </div>
     </div>
-    <script>
-      const img = document.querySelector(".header>img");
-      let pengguna = "";
-      fetch("/api/me")
-        .then((res) => res.json())
-        .then((user) => {
-          console.log(user);
-          img.src = `/photos/${user.photo}`;
-          document.bio.nama.value = user.nama_lengkap;
-          document.bio.username.value = user.username;
-          pengguna = user;
-        });
-
-      document.bio.onsubmit = async (e) => {
-        e.preventDefault();
-        console.log(document.bio.username.value);
-        if (
-          pengguna.nama_lengkap !== document.bio.nama.value ||
-          document.bio.username.value !== pengguna.username
-        ) {
-          await fetch(`/api/bio`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username: document.bio.username.value,
-              nama: document.bio.nama.value,
-            }),
-          });
-          alert("ok");
-        } else {
-          alert("Tidak ada yang di ubah");
-        }
-      };
-    </script>
+    <script src="../assets/java-script/index-profil.js"></script>
   </body>
 </html>
