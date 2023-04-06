@@ -147,3 +147,44 @@ img {
     padding-left: 10px;
     color: #00ccff;
 }
+
+@media(max-width:450px) {
+    .container {
+        width: 286px;
+        height: 69%;
+        max-width: 286px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    img {
+
+        height: 41px;
+        width: 41px;
+    }
+
+    label {
+
+        font-size: 10px;
+    }
+
+    .input-text {
+
+        font-size: 12px;
+    }
+
+    .input-group {
+        margin-top: 14px;
+    }
+
+    #profil-button {
+        margin-top: 22px;
+        width: 188px;
+    }
+
+    #profil-button button {
+        font-size: 13px;
+    }
+}
