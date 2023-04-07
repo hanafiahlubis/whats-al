@@ -274,3 +274,159 @@ a {
     flex-direction: column;
     height: 100vh;
 }
+
+@media(max-width:666px) {
+    .header>img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .open-btn {
+        font-size: 15px;
+    }
+
+    #serch>input {
+        font-size: 10px;
+        width: 94%;
+    }
+
+    .pesan-teman>div>img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .pesan-teman>div>h3 {
+        font-size: 12px;
+    }
+
+    .herder-kontak {
+        height: 44px;
+    }
+
+    .herder-kontak>img {
+        height: 40px;
+        width: 40px;
+    }
+
+    #my-sidepanel>a {
+        height: 19px;
+        font-size: 18px;
+    }
+}
+
+
+@media(max-width:420px) {
+    body {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .header>img {
+        width: 25px;
+        height: 25px;
+    }
+
+    #left-countain {
+        width: 40%;
+    }
+
+    #rigth-countain {
+        overflow: hidden;
+        width: 60%;
+    }
+
+    .herder-kontak {
+        height: 44px;
+    }
+
+    .herder-kontak>img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .herder-kontak>div>h2 {
+        font-size: 16px;
+    }
+
+
+    .open-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    #serch>input {
+        width: 4rem;
+        font-size: 8px;
+    }
+
+    .pesan-teman {
+        height: 38px;
+    }
+
+    .pesan-teman>div>img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .pesan-teman>div {
+        padding: 2px
+    }
+
+    h3 {
+        font-size: 8px;
+    }
+
+    .awal h1 {
+        font-size: 20px;
+    }
+
+    .awal p {
+        font-size: 13px;
+        text-align: center;
+    }
+
+    #my-sidepanel {
+        width: 113px;
+        height: 123px;
+    }
+
+    .sidepanel .close-btn {
+        top: 12px;
+        right: 14px;
+        font-size: 26px;
+    }
+
+    .sidepanel a {
+        padding: 0px 0 0 16px;
+        text-decoration: none;
+        font-size: 11px;
+        display: block;
+        font-size: 11px;
+        transition: 0.3s;
+    }
+
+    .user div>h3 {
+        font-size: 10px;
+    }
+
+    #my-sidepanel>a {
+        font-size: 10px;
+    }
+
+    .pesan-teman>div>h3 {
+        font-size: 10px;
+    }
+
+    .pengiriman>input {
+        width: 67%;
+        font-size: 10px;
+    }
+
+    .pengiriman>button {
+        width: 39px;
+        font-size: 10px;
+        margin: 0 5px;
+        position: relative;
+        left: 21px;
+    }
+}

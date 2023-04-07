@@ -38,7 +38,18 @@ fetch("/api/me")
     });
 
 function openNav() {
-    document.getElementById("my-sidepanel").style.width = "238px";
+    const sidepanel = document.getElementById("my-sidepanel"); // Simpan elemen sidepanel ke dalam variabel
+
+    if (sidepanel) { // Cek apakah elemen sidepanel ada di dalam DOM
+        if (window.innerWidth <= 420) { // Cek lebar window
+            sidepanel.style.width = "113px"; // Set lebar sidepanel menjadi 113px jika lebar window kurang dari 420px
+        } else if (window.innerWidth <= 666) {
+            sidepanel.style.width = "156px"; // Set lebar sidepanel menjadi 113px jika lebar window kurang dari 420px
+        }
+        else {
+            sidepanel.style.width = "238px"; // Set lebar sidepanel menjadi 238px jika lebar window 420px atau lebih
+        }
+    }
 }
 // untuk menutup menu
 document.querySelector(".close-btn-add").addEventListener("click", () => {

@@ -6,7 +6,18 @@ document.querySelector(".logout").addEventListener("click", async () => {
 });
 
 function openNav() {
-    document.getElementById("my-sidepanel").style.width = "238px";
+    const sidepanel = document.getElementById("my-sidepanel"); // Simpan elemen sidepanel ke dalam variabel
+
+    if (sidepanel) { // Cek apakah elemen sidepanel ada di dalam DOM
+        if (window.innerWidth <= 420) { // Cek lebar window
+            sidepanel.style.width = "113px"; // Set lebar sidepanel menjadi 113px jika lebar window kurang dari 420px
+        } else if (window.innerWidth <= 666) {
+            sidepanel.style.width = "156px"; // Set lebar sidepanel menjadi 113px jika lebar window kurang dari 420px
+        }
+        else {
+            sidepanel.style.width = "238px"; // Set lebar sidepanel menjadi 238px jika lebar window 420px atau lebih
+        }
+    }
 }
 
 document.querySelector(".close-btn").addEventListener("click", () => {
@@ -76,7 +87,7 @@ async function tampilkanTeman() {
     searchInput.addEventListener("input", () => {
         const inputValue = searchInput.value.toLowerCase();
         const allConteck = list.querySelectorAll("a");
-        allConteck.forEach((e, i) => {
+        allConteck.forEach((e, _i) => {
             const listItemText = e.textContent.toLowerCase();
 
             if (listItemText.indexOf(inputValue) !== -1) {
@@ -222,6 +233,7 @@ async function tompolKirim(tombol, _divUtama) {
     const input = document.createElement("input");
     input.setAttribute("type", "text");
     input.name = "pesan";
+    input.required = true;
     input.placeholder = "Kirim Pesan";
     input.className = "text-pesan";
     const button = document.createElement("button");

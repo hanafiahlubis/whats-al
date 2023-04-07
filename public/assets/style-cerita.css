@@ -1,0 +1,568 @@
+.material-symbols-outlined {
+    font-variation-settings: "FILL"0, "wght"400, "GRAD"0, "opsz"48;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    color: #00ccff;
+}
+
+body {
+    display: grid;
+    overflow: hidden;
+    height: 100vh;
+    background-color: #0c1022;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.sidepanel {
+    width: 0;
+    position: fixed;
+    z-index: 100;
+    height: 250px;
+    top: 0;
+    left: 0;
+    background-color: #0c1022;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    overflow: hidden;
+}
+
+.sidepanel a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidepanel a:hover {
+    color: #ee00ff;
+}
+
+.sidepanel .close-btn-add {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+}
+
+.open-btn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #0c1022;
+    padding: 10px 15px;
+    border: none;
+}
+
+.open-btn:hover {
+    background-color: #444;
+}
+
+#serch {
+    display: flex;
+    justify-content: center;
+
+    border-bottom: 1px solid #ee00ff;
+}
+
+#serch>input {
+    width: 16rem;
+}
+
+#left-countain {
+    width: 40%;
+    border-right: 1px solid #ee00ff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header {
+    padding: 8px;
+    border-bottom: 1px solid #ee00ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#right-countain {
+    width: 60%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#right-countain>form {
+    display: flex;
+}
+
+#right-countain>form>input {
+    flex-grow: 1;
+}
+
+.cerita-orang {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    border-bottom: 1px solid #ee00ff;
+}
+
+.cerita-orang>div {
+    padding: 10px;
+}
+
+.penerima {
+    align-self: flex-start;
+    background: azure;
+}
+
+.user {
+    align-self: flex-end;
+    background: green;
+    flex-direction: column;
+}
+
+img {
+    width: 49px;
+    height: 49px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.header>img {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.teman {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+a {
+    height: 50px;
+}
+
+.container-pesan {
+    background: aqua;
+    gap: 2px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.container-pesan>div:first-child {
+    margin-top: auto;
+}
+
+.herder-kontak {
+    display: flex;
+    height: 60px;
+    align-items: center;
+}
+
+.herder-kontak>img {
+    margin: 0 3.2% 0 0;
+}
+
+#serch {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    border-bottom: 1px solid #ee00ff;
+}
+
+#serch>input {
+    width: 16rem;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid;
+}
+
+#icon-tambah {
+    cursor: pointer;
+}
+
+#icon-tambah:hover {
+    color: #ee00ff;
+}
+
+.container-cerita {
+    background-color: rgb(59 115 110 / 22%);
+    display: none;
+    height: 100vh;
+    width: 100%;
+    z-index: 5;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-cerita {
+    position: relative;
+    width: 80%;
+    height: 89%;
+    background: #040717;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.add-cerita::before {
+    position: absolute;
+    width: 170%;
+    height: 170%;
+    content: "";
+    background-image: conic-gradient(transparent,
+            transparent,
+            transparent,
+            #ee00ff);
+    animation: rotate_border 6s linear infinite;
+}
+
+.add-cerita::after {
+    position: absolute;
+    width: 170%;
+    height: 170%;
+    content: "";
+    background-image: conic-gradient(transparent,
+            transparent,
+            transparent,
+            #00ccff);
+    animation: rotate_border 6s linear infinite;
+    animation-delay: -3s;
+}
+
+@keyframes rotate_border {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.add-form {
+    position: absolute;
+    content: "";
+    background-color: #0c1022;
+    border-radius: 50px 5px;
+    inset: 5px;
+    padding: 50px 40px;
+    z-index: 10;
+    color: #00ccff;
+}
+
+h2 {
+    font-size: 40px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.input-group {
+    margin-top: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.input-text {
+    width: 95%;
+    height: 30px;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #00ccff;
+    font-size: 20px;
+    padding-left: 10px;
+    color: #00ccff;
+}
+
+::placeholder {
+    font-size: 15px;
+    color: #00ccff;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.fa {
+    font-size: 20px;
+}
+
+button {
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 25px;
+}
+
+button:hover {
+    color: #ee00ff;
+}
+
+#post-button {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    transition: 1s;
+    margin-top: 70px;
+}
+
+.file {
+    font-size: 12px;
+}
+
+#post-button button {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    z-index: 10;
+    cursor: pointer;
+    font-size: 22px;
+    letter-spacing: 2px;
+    border: 1px solid #00ccff;
+    border-radius: 50px;
+    background-color: #0c1022;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00ccff;
+}
+
+.story-text {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 5px;
+    font-size: 12px;
+    z-index: 1;
+}
+
+.story {
+    position: relative;
+    display: inline-block;
+}
+
+.div-img {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    height: 591px;
+    gap: 2rem;
+}
+
+.div-img>img {
+    height: auto;
+    width: 320px;
+    object-fit: cover;
+    border-radius: 0;
+}
+
+.caption-img {
+    position: absolute;
+    top: 86%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.div-video {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-video>video {
+    height: 90vh;
+    width: 320px;
+}
+
+.div-video>p {
+    position: absolute;
+    top: 84%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 16px;
+    border-radius: 5px;
+}
+
+.tampil-cerita {
+    display: grid;
+    order: 2;
+    overflow-y: auto;
+    height: 90vh;
+}
+
+.container2 {
+    display: grid;
+}
+
+.box {
+    box-sizing: border-box;
+}
+
+@media(max-width:600px) {
+    h2 {
+        font-size: 31px;
+    }
+
+    .sidepanel {
+        padding-top: 37px;
+    }
+
+    .sidepanel .close-btn-add {
+        font-size: 30px;
+    }
+
+    .sidepanel a {
+        padding: 3px 13px 3px 31px;
+        font-size: 18px;
+    }
+
+
+    .button-group button {
+        font-size: 17px;
+    }
+
+    .file {
+        font-size: 10px;
+    }
+}
+
+@media(max-width:500px) {
+    .header>img {
+        width: 27px;
+        height: 27px;
+    }
+
+    .material-symbols-outlined {
+        font-size: 18px;
+    }
+
+    .open-btn {
+        font-size: 15px;
+    }
+
+    .cerita-orang>div>img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .cerita-orang>div>h3 {
+        font-size: 10px;
+    }
+
+    ::placeholder {
+        font-size: 10px;
+    }
+
+    .cerita-orang>div {
+        padding: 2px;
+    }
+
+    #serch>input {
+        width: 100%;
+    }
+
+    .herder-kontak {
+        height: 55px;
+    }
+
+    .herder-kontak>img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .tampil-cerita {
+        height: 87vh;
+        overflow-x: hidden;
+    }
+
+    .herder-kontak>div>h2 {
+        font-size: 21px;
+    }
+
+    .div-img {
+        height: 50vh;
+
+    }
+
+    .div-img img {
+        width: 69%;
+    }
+
+    .div-img p {
+        top: 82%;
+        font-size: 6px;
+    }
+
+    .div-video>video {
+        height: 73vh;
+        width: 70%;
+
+    }
+
+    .add-cerita {
+        height: 73%;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    #post-button {
+        margin-top: 39px;
+    }
+
+    #post-button button {
+        font-size: 13px;
+        height: 64%;
+    }
+}
+
+@media(max-width:410px) {
+    .add-cerita {
+        height: 53%;
+    }
+
+    .close-btn {
+        font-size: 11px;
+    }
+
+    .add-form {
+        padding: 50px 10px;
+    }
+
+    .input-group {
+        margin-top: 10px;
+    }
+
+    .file {
+        font-size: 7px;
+    }
+
+    #post-button button {
+        font-size: 9px;
+        height: 58%;
+    }
+}
