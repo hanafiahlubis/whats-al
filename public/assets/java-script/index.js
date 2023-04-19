@@ -37,12 +37,12 @@ fetch("/api/me")
     .then((res) => res.json())
     .then((user) => {
         pengguna = user;
-        img.src = `/photos/${user.photo}`;
+        // img.src = `/photos/${user.photo}`;
     });
 
 const teman = document.querySelector(".teman");
 
-img.addEventListener("click", () => (location.href = "profil"));
+// img.addEventListener("click", () => (location.href = "profil"));
 
 const dataTeman = [];
 
@@ -57,15 +57,15 @@ async function tampilkanTeman() {
         const divImg = document.createElement("div");
         const img = document.createElement("img");
 
-        img.src = `/photos/${e.photo}`;
+        // img.src = `/photos/${e.photo}`;
         img.alt = "Img Tidak ada";
-        divImg.appendChild(img);
+        // divImg.appendChild(img);
 
         const div = document.createElement("div");
         const h3 = document.createElement("h3");
         h3.textContent = e.nama_lengkap;
         div.appendChild(h3);
-        a.appendChild(divImg);
+        // a.appendChild(divImg);
         a.appendChild(div);
         a.value = e.id;
         a.className = `pesan-teman`;
@@ -78,6 +78,7 @@ async function tampilkanTeman() {
     buttons.forEach((e, i) => {
         e.onclick = async () => {
             awal.innerHTML = "";
+            console.log(intervalId);
             clearInterval(intervalId);
             membuatBio(i);
             pesan(e, i);
@@ -111,7 +112,7 @@ function membuatBio(index) {
     h2.textContent = dataTeman[index].username;
 
     div2.appendChild(h2);
-    div.appendChild(img);
+    // div.appendChild(img);
     div.appendChild(div2);
 
     div.className = "herder-kontak";

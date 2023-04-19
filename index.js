@@ -23,8 +23,9 @@ app.post("/api/akun", type, async (req, res) => {
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(req.body.password, salt);
     await client.query(
-      `INSERT INTO akun VALUES (default,'${req.body.username}', '${hash}','${req.body.name}','${req.file.filename}')`
+      `INSERT INTO akun VALUES (default,'${req.body.username}', '${hash}','${req.body.name}')`
     );
+    // '${req.file.filename}'
     res.send("Akun berhasil ditambahkan.");
   }
 });

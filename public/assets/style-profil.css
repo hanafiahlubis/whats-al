@@ -31,7 +31,8 @@ body {
     width: 400px;
     height: 100%;
     max-width: 400px;
-    max-height: 92%;
+    /* max-height: 92%; */
+    max-height: 67%;
     background: #040717;
     border-radius: 50px 5px;
     display: flex;
@@ -151,7 +152,8 @@ img {
 @media(max-width:450px) {
     .container {
         width: 286px;
-        height: 69%;
+        /* height: 69%; */
+        height: 46%;
         max-width: 286px;
     }
 
