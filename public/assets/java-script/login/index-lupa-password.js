@@ -1,4 +1,4 @@
-document.kirim.onclick = async (e) => {
+document.kirim.onsubmit = async (e) => {
     e.preventDefault();
     const username = document.kirim.username.value;
     const password = document.kirim.password.value;
