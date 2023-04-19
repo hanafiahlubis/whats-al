@@ -24,7 +24,7 @@ body {
     /* overflow-x: hidden; */
     transition: 0.5s;
     padding-top: 60px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .sidepanel a {
@@ -319,7 +319,7 @@ a {
 @media(max-width:420px) {
     body {
         width: 100%;
-        overflow: hidden;
+        /* overflow: hidden; */
     }
 
     .header>img {
@@ -332,7 +332,7 @@ a {
     }
 
     #rigth-countain {
-        overflow: hidden;
+        /* overflow: hidden; */
         width: 60%;
     }
 
