@@ -108,7 +108,7 @@ function membuatBio(index) {
     const h2 = document.createElement("h2");
     const img = document.createElement("img");
 
-    img.src = `/photos/${dataTeman[index].photo}`;
+    // img.src = `/photos/${dataTeman[index].photo}`;
     h2.textContent = dataTeman[index].username;
 
     div2.appendChild(h2);

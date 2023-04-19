@@ -101,6 +101,7 @@ body {
 
 #right-countain {
     flex-grow: 1;
+    height: 100vh;
     display: flex;
     gap: 20px;
     flex-direction: column;
